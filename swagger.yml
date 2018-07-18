@@ -1,0 +1,51 @@
+#swagger generate server -f swagger.yml -A matches
+#go run main.go --port=4450
+swagger: "2.0"
+info:
+  description: "The matches service of IAFoosball"
+  version: "1.0.0"
+  title: "Swagger Matches-Service"
+  termsOfService: "http://iafoosball.io/terms/"
+  contact:
+    email: "jonas.burster@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "0.0.0.0:4450"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /goals:
+    post:
+      summary: Create a new goal.
+      parameters:
+      - in: "body"
+        name: "body"
+        description: The goal information.
+        required: true
+        schema:
+          $ref: "#/definitions/Goal"
+      responses:
+        200:
+          description: "Successful created goal"
+definitions:
+  Goal:
+    type: object
+    required:
+      - match_id
+    properties:
+      user_id:
+        type: string
+        description: The unique user id given by the system.
+      match_id:
+        type: string
+        description: The unique match id.
+      side:
+        type: string
+        description: The side who scored the goal. Usually either red or blue.
+      datetime:
+        type: string
+        description: The datetime in nanoseconds of the goal.
+        example: "1257856852039812612"
