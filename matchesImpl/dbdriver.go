@@ -1,8 +1,7 @@
-package usersImpl
+package matchesImpl
 
 import (
 	"log"
-
 	"github.com/arangodb/go-driver"
 	"github.com/arangodb/go-driver/http"
 	"time"
@@ -29,9 +28,9 @@ func DB() driver.Database {
 		Authentication: driver.BasicAuthentication("joe", "joe"),
 	})
 	db, _ = c.Database(nil, "iaf")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	if err != nil {
+		log.Fatal(err)
+	}
 	}
 
 	return db

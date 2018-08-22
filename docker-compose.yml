@@ -21,3 +21,8 @@ services:
       - ARANGO_ROOT_PASSWORD=joe
     volumes:
       - /tmp/arangodb:/var/lib/arangodb3
+  swagger-ui:
+    container_name: "swagger"
+    build: './swagger-ui/'
+    ports:
+      - 2222:8080

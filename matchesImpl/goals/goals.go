@@ -2,70 +2,79 @@ package goals
 
 import (
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/iafoosball/users-service/usersImpl"
-	"time"
-	"github.com/iafoosball/users-service/restapi/operations"
-	"github.com/iafoosball/users-service/models"
-	"fmt"
+
+	"github.com/iafoosball/matches-service/restapi/operations"
+	"github.com/iafoosball/matches-service/matchesImpl"
+	"github.com/iafoosball/matches-service/models"
 )
 
-var db = usersImpl.DB()
-var colFriends = usersImpl.EdgeCol("friends")
+var db = matchesImpl.DB()
+var colGoals = matchesImpl.Col("goals")
+var colMatches = matchesImpl.Col("matches")
 
-func MakeFriendRequest() func(params operations.PostFriendsUserIDFriendIDParams) middleware.Responder {
-	return func(params operations.PostFriendsUserIDFriendIDParams) middleware.Responder {
-		friend := params.Body
-		friend.Accepted = false
-		friend.DatetimeRequest = time.Now().Format(time.RFC3339)
-		friend.Key = params.UserID + params.FriendID
-		if _, err := colFriends.CreateDocument(nil, friend); err != nil {
-			panic(err)
-		}
-		return operations.NewPostFriendsUserIDFriendIDOK()
+func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
+	return func(params operations.PostGoalsParams) middleware.Responder {
+
+		goal := params.Body
+		var match models.Match
+		colMatches.ReadDocument(nil, *goal.MatchID, &match)
+
+		return operations.NewPostGoalsOK()
+
+
+
+		//friend := params.Body
+		//friend.Accepted = false
+		//friend.DatetimeRequest = time.Now().Format(time.RFC3339)
+		//friend.Key = params.UserID + params.FriendID
+		//if _, err := colGoals.CreateDocument(nil, friend); err != nil {
+		//	panic(err)
+		//}
+		//return operations.NewPostFriendsUserIDFriendIDOK()
 	}
 }
 
-func AcceptFriendRequest() func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
-	return func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
-		query := "Update {_key: \"" + params.UserID + params.FriendID + "\"} WITH { accepted: true, datetime_accepted: \"" +
-			time.Now().Format(time.RFC3339) + "\" } IN friends "
-		if _, err := db.Query(nil, query, nil); err != nil {
-			panic(err)
-		}
-		return operations.NewPatchFriendsUserIDFriendIDOK()
-	}
-}
-
-func DeleteFriend() func(params operations.DeleteFriendsFriendshipIDParams) middleware.Responder {
-	return func(params operations.DeleteFriendsFriendshipIDParams) middleware.Responder {
-		if _, err := colFriends.RemoveDocument(nil, params.FriendshipID); err != nil {
-			panic(err)
-		}
-		return operations.NewDeleteFriendsFriendshipIDOK()
-	}
-}
-
-func ErrorHandling(err error) {
-	go GetFriends()
-}
-
-func GetFriends() func(params operations.GetFriendsUserIDParams) middleware.Responder {
-	return func(params operations.GetFriendsUserIDParams) middleware.Responder {
-		query := "FOR users, edge, edgesArray IN 1 ANY 'users/" + params.UserID + "' GRAPH 'friends' FILTER edgesArray.edges[*].accepted ALL == true Return {users}"
-		var friends []*models.User
-		if cursor, err := db.Query(nil, query, nil); err != nil {
-			panic(err)
-		} else {
-			for cursor.HasMore() {
-				var friend *models.User
-				cursor.ReadDocument(nil, friend)
-				fmt.Println(friend)
-				friends = append(friends, friend)
-			}
-		}
-		return operations.NewGetFriendsUserIDOK().WithPayload(friends)
-	}
-}
+//func AcceptFriendRequest() func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
+//	return func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
+//		query := "Update {_key: \"" + params.UserID + params.FriendID + "\"} WITH { accepted: true, datetime_accepted: \"" +
+//			time.Now().Format(time.RFC3339) + "\" } IN friends "
+//		if _, err := db.Query(nil, query, nil); err != nil {
+//			panic(err)
+//		}
+//		return operations.NewPatchFriendsUserIDFriendIDOK()
+//	}
+//}
+//
+//func DeleteFriend() func(params operations.DeleteFriendsFriendshipIDParams) middleware.Responder {
+//	return func(params operations.DeleteFriendsFriendshipIDParams) middleware.Responder {
+//		if _, err := colGoals.RemoveDocument(nil, params.FriendshipID); err != nil {
+//			panic(err)
+//		}
+//		return operations.NewDeleteFriendsFriendshipIDOK()
+//	}
+//}
+//
+//func ErrorHandling(err error) {
+//	go GetFriends()
+//}
+//
+//func GetFriends() func(params operations.GetFriendsUserIDParams) middleware.Responder {
+//	return func(params operations.GetFriendsUserIDParams) middleware.Responder {
+//		query := "FOR users, edge, edgesArray IN 1 ANY 'users/" + params.UserID + "' GRAPH 'friends' FILTER edgesArray.edges[*].accepted ALL == true Return {users}"
+//		var friends []*models.User
+//		if cursor, err := db.Query(nil, query, nil); err != nil {
+//			panic(err)
+//		} else {
+//			for cursor.HasMore() {
+//				var friend *models.User
+//				cursor.ReadDocument(nil, friend)
+//				fmt.Println(friend)
+//				friends = append(friends, friend)
+//			}
+//		}
+//		return operations.NewGetFriendsUserIDOK().WithPayload(friends)
+//	}
+//}
 
 //func MakeFriendRequest() func(params operations.GetUsersUserIDParams) middleware.Responder {
 //	var f friend
@@ -75,7 +84,7 @@ func GetFriends() func(params operations.GetFriendsUserIDParams) middleware.Resp
 //	f.ACCEPTED = false
 //	f.From = "users/" + uid
 //	f.To = "users/" + friendid
-//	_, _ = colFriends.CreateDocument(nil, f)
+//	_, _ = colGoals.CreateDocument(nil, f)
 //}
 //
 //func AcceptFriendRequest(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +99,7 @@ func GetFriends() func(params operations.GetFriendsUserIDParams) middleware.Resp
 //	f.ACCEPTED = true
 //	f.From = "users/" + friendid
 //	f.To = "users/" + uid
-//	_, _ = colFriends.UpdateDocument(nil, meta.Key, f)
+//	_, _ = colGoals.UpdateDocument(nil, meta.Key, f)
 //	w.WriteHeader(http.StatusOK)
 //}
 //
