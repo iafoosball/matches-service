@@ -1,4 +1,4 @@
-#swagger generate server -f swagger.yml -A matches
+#swagger generate server -f matches.yml -A matches
 #go run main.go --port=4450
 swagger: "2.0"
 info:

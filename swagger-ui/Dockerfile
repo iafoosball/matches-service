@@ -28,6 +28,6 @@ COPY nginx.conf /etc/nginx/
 ADD ./dist/* /usr/share/nginx/html/
 ADD ./docker-run.sh /usr/share/nginx/
 
-COPY ../swagger.yml /usr/share/nginx/html/dist/
+COPY ../matches.yml /usr/share/nginx/html/dist/
 
 CMD ["sh", "/usr/share/nginx/docker-run.sh"]

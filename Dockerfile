@@ -6,16 +6,17 @@ FROM golang:1.10 as builder
 ADD https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 /usr/bin/dep
 RUN chmod +x /usr/bin/dep
 
-#Download the service and dependencies
+#Download the service
 RUN mkdir -p /go/src/github.com/iafoosball
 WORKDIR /go/src/github.com/iafoosball
 RUN git clone https://github.com/iafoosball/matches-service.git
 WORKDIR /go/src/github.com/iafoosball/matches-service
-RUN dep ensure -vendor-only
 
 #Download and install swagger in go and run codegen
 RUN go get -u github.com/go-swagger/go-swagger/cmd/swagger
 RUN /go/bin/swagger generate server -f /go/src/github.com/iafoosball/matches-service/swagger.yml -A matches
+
+RUN dep ensure -vendor-only
 
 #Install the service
 WORKDIR /go/src/github.com/iafoosball/matches-service/cmd/matches-server/

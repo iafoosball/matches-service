@@ -1,12 +1,12 @@
 version: '3'
 services:
-  users-service:
-    container_name: 'users-service'
+  matches-service:
+    container_name: 'matches-service'
     build: './'
     ports:
       - 4444:4444
     volumes:
-      - './api:$HOME/go/src/github.com/iafoosball/users-service'
+      - './api:$HOME/go/src/github.com/iafoosball/matches-service'
     links:
       - "arangodb"
 #      - "arangodb:database"
@@ -18,9 +18,10 @@ services:
     ports:
       - 8529:8529
     environment:
-      - ARANGO_ROOT_PASSWORD=joe
+    - ARANGO_ROOT_PASSWORD=iafoosball for the win
     volumes:
-      - /tmp/arangodb:/var/lib/arangodb3
+    - /var/lib/arangodb-persistent:/var/lib/arangodb3
+
   swagger-ui:
     container_name: "swagger"
     build: './swagger-ui/'
