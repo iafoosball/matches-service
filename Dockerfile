@@ -15,7 +15,7 @@ WORKDIR /go/src/github.com/iafoosball/matches-service
 #Download and install swagger in go and run codegen
 RUN go get -u github.com/go-swagger/go-swagger/cmd/swagger
 RUN /go/bin/swagger generate server -f /go/src/github.com/iafoosball/matches-service/swagger.yml -A matches
-
+RUN go get -u golang.org/x/net/netutil
 RUN dep ensure -vendor-only
 
 #Install the service

@@ -11,7 +11,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "0.0.0.0:4444"
+host: "0.0.0.0:9000"
 schemes:
 - "http"
 produces:
