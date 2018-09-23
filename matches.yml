@@ -88,9 +88,21 @@ definitions:
   Goal:
     type: object
     required:
-      - match_id
+      - _from
     properties:
-      match_id:
+      _key:
+        type: string
+        description: The match id
+        example: "0123456789"
+      _from:
+        type: string
+        description: The match id
+        example: "matches/01234"
+      _to:
+        type: string
+        description: The match id
+        example: "matches/56789"
+      goal_id:
         type: string
         description: The unique match id.
       side:

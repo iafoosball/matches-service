@@ -1,44 +1,21 @@
-package goals
+package matchesImpl
 
 import (
-	"github.com/go-openapi/runtime/middleware"
-
-	"github.com/iafoosball/matches-service/restapi/operations"
-	"github.com/iafoosball/matches-service/matchesImpl"
+	"github.com/arangodb/go-driver"
 	"github.com/iafoosball/matches-service/models"
+	"github.com/iafoosball/matches-service/restapi/operations"
 )
 
-var db = matchesImpl.DB()
-var colGoals = matchesImpl.Col("goals")
-var colMatches = matchesImpl.Col("matches")
-
-func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
-	return func(params operations.PostGoalsParams) middleware.Responder {
-
-		goal := params.Body
-		var match models.Match
-		colMatches.ReadDocument(nil, *goal.MatchID, &match)
-
-		return operations.NewPostGoalsOK()
-
-
-
-		//friend := params.Body
-		//friend.Accepted = false
-		//friend.DatetimeRequest = time.Now().Format(time.RFC3339)
-		//friend.Key = params.UserID + params.FriendID
-		//if _, err := colGoals.CreateDocument(nil, friend); err != nil {
-		//	panic(err)
-		//}
-		//return operations.NewPostFriendsUserIDFriendIDOK()
-	}
+func CreateGoal(goal models.Goal) (*operations.PostGoalsOK, driver.DocumentMeta) {
+	meta, _ := goalsCol.CreateDocument(nil, &goal)
+	return operations.NewPostGoalsOK(), meta
 }
 
 //func AcceptFriendRequest() func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
 //	return func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
 //		query := "Update {_key: \"" + params.UserID + params.FriendID + "\"} WITH { accepted: true, datetime_accepted: \"" +
 //			time.Now().Format(time.RFC3339) + "\" } IN friends "
-//		if _, err := db.Query(nil, query, nil); err != nil {
+//		if _, err := database.Query(nil, query, nil); err != nil {
 //			panic(err)
 //		}
 //		return operations.NewPatchFriendsUserIDFriendIDOK()
@@ -62,7 +39,7 @@ func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
 //	return func(params operations.GetFriendsUserIDParams) middleware.Responder {
 //		query := "FOR users, edge, edgesArray IN 1 ANY 'users/" + params.UserID + "' GRAPH 'friends' FILTER edgesArray.edges[*].accepted ALL == true Return {users}"
 //		var friends []*models.User
-//		if cursor, err := db.Query(nil, query, nil); err != nil {
+//		if cursor, err := database.Query(nil, query, nil); err != nil {
 //			panic(err)
 //		} else {
 //			for cursor.HasMore() {

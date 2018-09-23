@@ -1,233 +1,133 @@
-#swagger generate server -f matches.yml -A users
-#go run main.go --port=4444
+#swagger generate server -f matches.yml -A matches
+#go run main.go --port=4450
 swagger: "2.0"
 info:
-  description: "The users service of IAFoosball"
-  version: "1.0.0"
-  title: "Swagger Users-Service"
+  description: "The matches service of IAFoosball"
+  version: "2.0.0"
+  title: "Matches-Service"
   termsOfService: "http://iafoosball.io/terms/"
   contact:
-    email: "jonas.burster@gmail.com"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "0.0.0.0:9000"
+    email: "jburst16@student.aau.dk"
+#  license:
+#    name: "Apache 2.0"
+#    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "0.0.0.0:4450"
 schemes:
 - "http"
 produces:
 - "application/json"
 paths:
-  /users:
+  /goals:
     post:
-      summary: Create a new user.
-      produces:
-      - "application/json"
+      summary: "Create a new goal. The tables only sends information gathered by it.
+                This means information included here must be match id, the side of the goal and the datetime."
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: The user information.
         required: true
         schema:
-          $ref: "#/definitions/User"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Pet not found"
-        405:
-          description: "Validation exception"
-  /users/{user_id}:
-    get:
-      summary: Get a user by ID.
-      produces:
-      - "application/json"
-      parameters:
-      - name: "user_id"
-        in: "path"
-        description: "ID of user to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-    delete:
-      summary: Delte a user by ID.
-      parameters:
-      - name: "user_id"
-        in: "path"
-        description: "ID of user to be deleted"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation, user deleted"
-    put:
-      summary: Update a user by ID.
-      consumes:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: The updated user information.
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      - in: "path"
-        name: "user_id"
-        description: "ID of user to be deleted"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation, user updated"
-  /friends/{user_id}:
-    get:
-      summary: Get all friends for a user.
-      parameters:
-        - in: "path"
-          name: "user_id"
-          description: "ID of user to making the friend request"
-          required: true
-          type: "string"
+          $ref: "#/definitions/Goal"
       responses:
         200:
           description: "Successful created goal"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
-  /friends/{user_id}/{friend_id}:
+  /goals/{goal_id}:
+    get:
+      summary: Get a single goal.
+      parameters:
+      - in: "path"
+        name: "goal_id"
+        description: The goal id.
+        type: string
+        required: true
+      responses:
+        200:
+          description: "Successful created goal"
+  /matches:
     post:
-      summary: Make a new friend request. If a request is made by both users, it means he request is accepted.
+      summary: "Create a new match"
       consumes:
       - "application/json"
       parameters:
       - in: "body"
         name: "body"
-        description: The updated user information.
+        description: "The match information."
         required: true
         schema:
-          $ref: "#/definitions/Friend"
-      - in: "path"
-        name: "user_id"
-        description: "ID of user to making the friend request"
-        required: true
-        type: "string"
-      - in: "path"
-        name: "friend_id"
-        description: "ID of the friend."
-        required: true
-        type: "string"
+          $ref: "#/definitions/Match"
       responses:
         200:
-          description: "Successful created goal"
-    patch:
-      summary: Change the boolean of a friendrequest from false to true.
+          description: "Successful."
+  /matches/{match_id}:
+    get:
+      summary: "Returns the match data for the specified match id."
+      parameters:
+        - in: "path"
+          name: "match_id"
+          description: "The match id."
+          type: string
+          required: true
+      responses:
+        200:
+          description: "Successful."
+  /matches/users/{user_id}:
+    get:
+      summary: "Returns all the matches for a user id."
       parameters:
         - in: "path"
           name: "user_id"
-          description: "ID of user to making the friend request"
+          description: "The user id."
+          type: string
           required: true
-          type: "string"
-        - in: "path"
-          name: "friend_id"
-          description: "ID of the friend."
-          required: true
-          type: "string"
       responses:
         200:
-          description: "Successful"
-  /friends/{friendship_id}:
-    delete:
-      summary: Delete a friendship.
-      parameters:
-        - in: "path"
-          name: "friendship_id"
-          description: "ID of the friendship being deleted."
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "Successful"
+          description: "Successful."
+
 definitions:
-  User:
+  Goal:
     type: object
+    required:
+      - from
     properties:
-      user_id:
+      from:
         type: string
-        description: The unique user id given by the system.
-      firstname:
+        description: the match id
+      goal_id:
         type: string
-        description: The first name of the user.
-      lastname:
+        description: The unique match id.
+      side:
         type: string
-        description: The last name of the user.
-      username:
-        type: string
-        description: The username of the user.
-      email:
-        type: string
-        description: The email of the user.
-      country:
-        type: string
-        description: The country of the user.
-      birthday:
-        type: string
-        description: The birthday of the user.
-      password:
-        type: string
-        description: The password of the user.
-      imageuri:
-        type: string
-        description: The image Uri of the user.
-      usertype:
-        type: string
-        description: What is this?
+        description: The side who scored the goal. Usually either red or blue.
+      position_attack:
+        type: boolean
+        description: This could be used in a double game, if the person attacking scores.
       datetime:
         type: string
-        description: The datetime when the user register.
-      cardid:
-        type: string
-        description: The cardid of the user. What is this actually?
-      creditcardnumber:
-        type: string
-        description: Really?
-      mmr:
-        type: string
-        description: Match making ranking. What is this used for?
-      level:
-        type: string
-        description: The level of the user.
-  Friend:
+        description: The datetime in nanoseconds of the goal.
+        example: "1257856852039812612 - Do we want to put additional information here?"
+
+  Match:
     type: object
     properties:
-      _key:
+      blue_user_id_one:
         type: string
-        description: The unique friend ID. This contains the id from the requesting using and appended to it the receiving user.
-        example: "0123456789"
-      _from:
+        description: This is the user id of the first player playing on the blue side.
+      blue_user_id_two:
         type: string
-        description: The user_id (with "users/" infront) of the person making the friend request.
-        example: "users/01234"
-      _to:
+        description: This is the user id of the second player playing on the blue side. (Not used in single)
+      red_user_id_one:
         type: string
-        description: The user_id (with "users/" infront) of the person getting the friend request.
-        example: "users/56789"
-      datetime_request:
+        description: This is the user id of the first player playing on the red side.
+      red_user_id_two:
         type: string
-        description: Should dates and accepted be handled by the server? The datetime when the request is made.
-      datetime_accepted:
-        type: string
-        description: The datetime when the request is accepted.
-        example:
-      accepted:
+        description: This is the user id of the second player playing on the red side. (Not used in single)
+      rated_match:
         type: boolean
-        description: Has the friend accepted the request.
+        description: A match can be rated, ie a ranked game with points, or without.
+      position_attack:
+        type: boolean
+        description: If the match is a double, the position can be attack. (Not used at the moment)
+
+
+

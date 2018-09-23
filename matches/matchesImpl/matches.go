@@ -1,11 +1,20 @@
-package matches
+package matchesImpl
 
 import (
-	"github.com/iafoosball/matches-service/matchesImpl"
+	"github.com/arangodb/go-driver"
+	"github.com/iafoosball/matches-service/models"
+	"github.com/iafoosball/matches-service/restapi/operations"
 )
 
-var dbMatches = matchesImpl.DB()
-var colMatches = matchesImpl.Col("matches")
+func CreateMatch(match models.Match) (*operations.PostMatchesOK, driver.DocumentMeta) {
+	meta, _ := matchesCol.CreateDocument(nil, &match)
+	return operations.NewPostMatchesOK(), meta
+}
+
+func DeleteMatch(matchId string) *operations.PostMatchesOK {
+	matchesCol.RemoveDocument(nil, matchId)
+	return operations.NewPostMatchesOK()
+}
 
 //func GetUserByID() func(params operations.GetUsersUserIDParams) middleware.Responder {
 //	return func(params operations.GetUsersUserIDParams) middleware.Responder {
