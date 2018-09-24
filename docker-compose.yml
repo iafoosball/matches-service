@@ -11,7 +11,8 @@ services:
 #      - "arangodb:database"
     depends_on:
       - 'arangodb'
-#      condition: service_healthy
+#      condition: service_health
+
   arangodb:
     container_name: 'matches-arangodb'
     image: arangodb/arangodb:3.3.11
