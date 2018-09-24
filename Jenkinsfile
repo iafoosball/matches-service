@@ -2,9 +2,14 @@ pipeline {
     agent any
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
+        COMPOSE_FILE = "docker-compose.yml"
     }
     stages {
-    sh "docker-compose up"
+        stage ("Build") {
+            steps {
+            sh "docker-compose up"
+            }
+        }
     }
     post {
         always {
