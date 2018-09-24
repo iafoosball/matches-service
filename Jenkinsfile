@@ -7,7 +7,12 @@ pipeline {
     stages {
         stage ("Build") {
             steps {
-            sh "docker-compose up"
+            sh "docker-compose build"
+            }
+        }
+        stage ("Deploy") {
+            steps {
+            sh "docker-compose up scale matches=4"
             }
         }
     }
