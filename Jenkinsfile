@@ -1,13 +1,14 @@
-node {
-
-    stage('Initialize'){
-        def dockerHome = tool 'docker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
+pipeline {
+    agent any
+    environment {
+        COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
     }
-
-
-    stage('Build'){
-        echo "$PWD"
-        sh "docker-compose up"
+    stages {
+    sh "docker-compose up"
     }
+    post {
+        always {
+            sh "docker-compose down -v"
+        }
     }
+}
