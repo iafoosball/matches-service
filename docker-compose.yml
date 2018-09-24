@@ -1,16 +1,16 @@
 version: '2'
 services:
-  matches-service:
-    build: './'
-    ports:
-      - 9000
-    volumes:
-      - './api:$HOME/go/src/github.com/iafoosball/matches-service'
-    links:
-      - "arangodb"
-#      - "arangodb:database"
-    depends_on:
-      - 'arangodb'
+#  matches-service:
+#    build: './'
+#    ports:
+#      - 9000
+#    volumes:
+#      - './api:$HOME/go/src/github.com/iafoosball/matches-service'
+#    links:
+#      - "arangodb"
+##      - "arangodb:database"
+#    depends_on:
+#      - 'arangodb'
 #      condition: service_health
 
   arangodb:
