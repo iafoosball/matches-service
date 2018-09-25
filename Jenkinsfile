@@ -14,7 +14,7 @@ pipeline {
 
         stage ("Deploy") {
             steps {
-            sh "docker-compose up --scale matches-service=3 --force-recreate"
+            sh "docker-compose up --force-recreate"
             }
         }
     }
