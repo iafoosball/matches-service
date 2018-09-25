@@ -8,13 +8,13 @@ pipeline {
     stages {
         stage ("Build") {
             steps {
-            sh "docker-compose build"
+            sh "docker-compose build --pull"
             }
         }
 
         stage ("Deploy") {
             steps {
-            sh "docker-compose up"
+            sh "docker-compose up scale matches-service=4"
             }
         }
     }
