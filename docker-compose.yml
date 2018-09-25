@@ -11,7 +11,7 @@ services:
 #      - "arangodb:database"
     depends_on:
       - 'arangodb'
-      condition: service_health
+#      condition: service_health
 
   arangodb:
     container_name: 'matches-arangodb'
