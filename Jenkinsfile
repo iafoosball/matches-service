@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage ("Build") {
             steps {
-            sh "docker-compose build --pull"
+            sh "docker-compose build --force-recreate"
             }
         }
 
