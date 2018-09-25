@@ -25,7 +25,7 @@ agent {
 
         stage ("Deploy") {
             steps {
-            sh "docker-compose run -d arangodb"
+            sh "docker-compose run"
             }
         }
     }
