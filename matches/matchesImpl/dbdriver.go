@@ -12,7 +12,7 @@ import (
 var (
 	database             driver.Database = dbDriver()
 	initDatabase         bool            = false
-	port                 int             = 9004
+	port                 int             = 9002
 	url                  string          = "http://localhost:"
 	databaseUser         string          = "iaf-matches"
 	databaseUserPassword string          = "iaf-matches-2018@secret"
