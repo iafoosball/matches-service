@@ -1,17 +1,17 @@
 version: '2'
 services:
-#  matches-service:
-#    build: './'
-#    ports:
-#      - 9000
-#    volumes:
-#      - './api:$HOME/go/src/github.com/iafoosball/matches-service'
-#    links:
-#      - "arangodb"
-##      - "arangodb:database"
-#    depends_on:
-#      - 'arangodb'
-#      condition: service_health
+  matches-service:
+    build: './'
+    ports:
+      - 9000
+    volumes:
+      - './api:$HOME/go/src/github.com/iafoosball/matches-service'
+    links:
+      - "arangodb"
+#      - "arangodb:database"
+    depends_on:
+      - 'arangodb'
+      condition: service_health
 
   arangodb:
     container_name: 'matches-arangodb'
@@ -22,8 +22,8 @@ services:
     - ARANGO_ROOT_PASSWORD=iafoosball@matches for the win
     volumes:
     - /var/lib/arangodb-matches-persistent:/var/lib/arangodb3
-#  swagger-ui:
-#    container_name: "matches-swagger"
-#    build: './swagger-ui/'
-#    ports:
-#      - 9005:8080
+  swagger-ui:
+    container_name: "matches-swagger"
+    build: './swagger-ui/'
+    ports:
+      - 9005:8080

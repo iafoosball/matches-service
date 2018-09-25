@@ -10,11 +10,13 @@ pipeline {
             sh "docker run hello-world"
             }
         }
+        /*
         stage ("Deploy") {
             steps {
             sh "docker-compose up"
             }
         }
+        */
     }
     post {
         always {
