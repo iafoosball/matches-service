@@ -10,13 +10,13 @@ pipeline {
             sh "docker run hello-world"
             }
         }
-        /*
+
         stage ("Deploy") {
             steps {
-            sh "docker-compose up"
+            sh "docker-compose up -d arangodb"
             }
         }
-        */
+
     }
     post {
         always {
