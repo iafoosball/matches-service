@@ -14,7 +14,7 @@ pipeline {
 
         stage ("Deploy") {
             steps {
-            sh "docker-compose up scale matches-service=4"
+            sh "docker-compose up --scale matches-service=4"
             }
         }
     }
