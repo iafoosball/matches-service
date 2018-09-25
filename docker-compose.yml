@@ -22,6 +22,7 @@ services:
     - ARANGO_ROOT_PASSWORD=iafoosball@matches for the win
     volumes:
     - /var/lib/arangodb-matches-persistent:/var/lib/arangodb3
+
   swagger-ui:
     container_name: "matches-swagger"
     build: './swagger-ui/'
