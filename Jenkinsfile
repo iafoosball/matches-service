@@ -25,15 +25,13 @@ agent {
 
         stage ("Deploy") {
             steps {
-            sh "docker-compose run"
+            sh "docker-compose up"
             }
         }
     }
-    /*
     post {
         always {
             sh "docker-compose down -v"
         }
     }
-    */
 }
