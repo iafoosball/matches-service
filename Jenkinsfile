@@ -1,16 +1,5 @@
 pipeline {
 
-/*
-agent {
-        docker {
-            image 'pdmlab/jenkins-node-docker-agent:6.11.1'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
-    */
-
-
-
     agent any
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
