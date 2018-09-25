@@ -3,7 +3,7 @@ services:
   matches-service:
     build: './'
     ports:
-      - 9000
+      - 9000:4444
     volumes:
       - './api:$HOME/go/src/github.com/iafoosball/matches-service'
     links:
