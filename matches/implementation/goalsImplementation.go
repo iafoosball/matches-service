@@ -1,4 +1,4 @@
-package matchesImpl
+package implementation
 
 import (
 	"github.com/arangodb/go-driver"
@@ -10,6 +10,10 @@ func CreateGoal(goal models.Goal) (*operations.PostGoalsOK, driver.DocumentMeta)
 	meta, _ := goalsCol.CreateDocument(nil, &goal)
 	return operations.NewPostGoalsOK(), meta
 }
+
+//func GetGoal(id string) (*operations.GetGoalsGoalID) middleware.Responder{
+//
+//}
 
 //func AcceptFriendRequest() func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
 //	return func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {

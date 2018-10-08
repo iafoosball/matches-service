@@ -1,4 +1,4 @@
-package matchesImpl
+package implementation
 
 import (
 	"github.com/iafoosball/matches-service/models"
