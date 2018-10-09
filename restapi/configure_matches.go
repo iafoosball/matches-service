@@ -34,11 +34,11 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 	api.JSONProducer = runtime.JSONProducer()
 
 	//[Start: Goals end points]
-	api.PostGoalsHandler = operations.PostGoalsHandlerFunc(api.CreateGoal())
+	//api.PostGoalsHandler = operations.PostGoalsHandlerFunc(api.CreateGoal())
 	//[End: Goals end points]
 
 	//[Start: Matches end points]
-	api.PostMatchesHandler = operations.PostMatchesHandlerFunc(api.CreateMatch())
+	//api.PostMatchesHandler = operations.PostMatchesHandlerFunc(api.CreateMatch())
 	//[End: Matches end points]
 
 	api.ServerShutdown = func() {}
