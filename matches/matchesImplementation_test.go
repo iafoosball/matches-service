@@ -1,14 +1,11 @@
 package matches
 
-import (
-	"github.com/iafoosball/matches-service/models"
-	"testing"
-)
+import "testing"
 
 func TestCreateMatch(*testing.T) {
-	CreateMatch(models.Match{
-		RatedMatch: true,
-	})
+	//CreateMatch(models.Match{
+	//	RatedMatch: true,
+	//})
 }
 
 func TestDeleteMatch(*testing.T) {
