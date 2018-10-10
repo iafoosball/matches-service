@@ -1,4 +1,4 @@
-package implementation
+package matches
 
 import (
 	"github.com/arangodb/go-driver"

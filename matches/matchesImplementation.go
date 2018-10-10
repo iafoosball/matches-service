@@ -1,14 +1,15 @@
-package implementation
+package matches
 
 import (
-	"github.com/arangodb/go-driver"
-	"github.com/iafoosball/matches-service/models"
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/iafoosball/matches-service/restapi/operations"
 )
 
-func CreateMatch(match models.Match) (*operations.PostMatchesOK, driver.DocumentMeta) {
-	meta, _ := matchesCol.CreateDocument(nil, &match)
-	return operations.NewPostMatchesOK(), meta
+func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
+	return func(params operations.PostMatchesParams) middleware.Responder {
+		_, _ = matchesCol.CreateDocument(nil, &params.Body)
+		operations.NewPostMatchesOK()
+	}
 }
 
 func DeleteMatch(matchId string) *operations.PostMatchesOK {
