@@ -28,11 +28,11 @@ var (
 )
 
 func dbDriver() driver.Database {
-	counter := 0
+	c := 0
 	var db driver.Database
-	for db == nil && counter < 10 {
-		counter++
-		// create repeated call library until connection is established with increasing sleep timer
+	// create repeated call library until connection is established with increasing sleep timer
+	for db == nil && c < 10 {
+		c++
 		// can be put in docker-compose with health-check
 		fmt.Println("Connecting to " + url + strconv.Itoa(port))
 		if conn, err := http.NewConnection(http.ConnectionConfig{
@@ -54,7 +54,8 @@ func dbDriver() driver.Database {
 			log.Fatal(err)
 		}
 		if db == nil {
-			time.Sleep(2 * time.Second)
+			log.Println("Sleep seconds" + strconv.Itoa(c))
+			time.Sleep(time.Duration(c) * 1000 * time.Millisecond)
 		}
 	}
 	return db
