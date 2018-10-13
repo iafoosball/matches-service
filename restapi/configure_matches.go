@@ -4,19 +4,33 @@ package restapi
 
 import (
 	"crypto/tls"
+	"github.com/go-openapi/swag"
+	"github.com/iafoosball/matches-service/matches"
+	"log"
 	"net/http"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/tylerb/graceful"
-
 	"github.com/iafoosball/matches-service/restapi/operations"
 )
 
 //go:generate swagger generate server --target .. --name matches --spec ../swagger.yml
 
+var ConfigurationFlags = struct {
+	DatabaseHost     string `long:"dbhost" description:"The database host url" default:"arangodb" env:"dbhost"`
+	DatabasePort     int    `long:"dbport" description:"The database port" default:"8529" env:"dbport"`
+	DatabaseUser     string `long:"dbuser" description:"The database user" default:"root" env:"dbuser"`
+	DatabasePassword string `long:"dbpassword" description:"The database password for the user" default:"matches-password" env:"dbpassword"`
+}{}
+
 func configureFlags(api *operations.MatchesAPI) {
-	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
+	api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{
+		swag.CommandLineOptionsGroup{
+			ShortDescription: "Additional configuration parameters",
+			LongDescription:  "Additional configuration parameters, mainly used to configure the arangodb connection.",
+			Options:          &ConfigurationFlags,
+		},
+	}
 }
 
 func configureAPI(api *operations.MatchesAPI) http.Handler {
@@ -38,7 +52,7 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 	//[End: Goals end points]
 
 	//[Start: Matches end points]
-	//api.PostMatchesHandler = operations.PostMatchesHandlerFunc(api.CreateMatch())
+	api.PostMatchesHandler = operations.PostMatchesHandlerFunc(matches.CreateMatch())
 	//[End: Matches end points]
 
 	api.ServerShutdown = func() {}
@@ -55,7 +69,9 @@ func configureTLS(tlsConfig *tls.Config) {
 // If you need to modify a config, store server instance to stop it individually later, this is the place.
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
-func configureServer(s *graceful.Server, scheme, addr string) {
+func configureServer(s *http.Server, scheme, addr string) {
+	log.SetFlags(log.Ltime | log.Lshortfile)
+	matches.InitDatabase(ConfigurationFlags.DatabaseHost, ConfigurationFlags.DatabasePort, ConfigurationFlags.DatabaseUser, ConfigurationFlags.DatabasePassword)
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
