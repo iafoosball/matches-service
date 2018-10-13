@@ -3,12 +3,14 @@ package matches
 import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/iafoosball/matches-service/restapi/operations"
+	"log"
 )
 
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
-		_, _ = matchesCol.CreateDocument(nil, &params.Body)
-		operations.NewPostMatchesOK()
+		log.Println(params.Body.RatedMatch)
+		_, _ = Collection(matchesColName).CreateDocument(nil, &params.Body)
+		return operations.NewPostMatchesOK()
 	}
 }
 

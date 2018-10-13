@@ -10,102 +10,115 @@ import (
 )
 
 var (
-	database             driver.Database = dbDriver()
-	initDatabase         bool            = false
-	port                 int             = 9001
-	url                  string          = "http://localhost:"
-	databaseUser         string          = "iaf-matches"
-	databaseUserPassword string          = "iaf-matches-2018@secret"
-	databaseName         string          = "iaf-matches"
+	database         driver.Database
+	host             string
+	port             int
+	databaseUser     string
+	databasePassword string
+	databaseName     = "iaf-matches"
 
-	goalsColName   string            = "goals"
-	goalsCol       driver.Collection = Col(goalsColName)
-	matchesColName string            = "matches"
-	matchesCol     driver.Collection = Col(matchesColName)
-
-	matchesCollectionExists bool = false
-	goalsCollectionExists   bool = false
+	goalsColName   = "goals"
+	goalsCol       driver.Collection
+	matchesColName = "matches"
+	matchesCol     driver.Collection
 )
 
-func dbDriver() driver.Database {
-	c := 0
-	var db driver.Database
-	// create repeated call library until connection is established with increasing sleep timer
-	for db == nil && c < 10 {
-		c++
-		// can be put in docker-compose with health-check
-		fmt.Println("Connecting to " + url + strconv.Itoa(port))
-		if conn, err := http.NewConnection(http.ConnectionConfig{
-			Endpoints: []string{url + strconv.Itoa(port)},
-		}); err == nil {
-			if c, e := driver.NewClient(driver.ClientConfig{
-				Connection:     conn,
-				Authentication: driver.BasicAuthentication("root", "iafoosball@matches for the win"),
-			}); e == nil {
-				if !initDatabase {
-					db = ensureDatabaseName(databaseName, c, db)
-					initDatabase = true
-				}
-			} else {
-				log.Fatal(e)
-			}
+func InitDatabase(dbHost string, dbPort int, dbUser string, dbPassword string) {
+	port = dbPort
+	host = dbHost
+	databaseUser = dbUser
+	databasePassword = dbPassword
 
-		} else {
-			log.Fatal(err)
-		}
-		if db == nil {
-			log.Println("Sleep seconds" + strconv.Itoa(c))
+	fmt.Println(host + strconv.Itoa(dbPort) + dbUser + dbPassword)
+	c := 0
+	for database == nil && c < 10 {
+		initDatabaseDriver(dbUser, dbPassword)
+		c++
+		if database == nil {
+			log.Println("Database not reachable! Sleep seconds: " + strconv.Itoa(c))
 			time.Sleep(time.Duration(c) * 1000 * time.Millisecond)
 		}
 	}
-	return db
 }
 
-func ensureDatabaseName(name string, c driver.Client, db driver.Database) driver.Database {
-	fmt.Println("Create new database with user iaf-matches. If already there skip")
-	if db == nil {
-		if db, err := c.CreateDatabase(nil, databaseName, &driver.CreateDatabaseOptions{
-			[]driver.CreateDatabaseUserOptions{
-				{
-					UserName: databaseUser,
-					Password: databaseUserPassword,
-				},
-			},
-		},
-		); err == nil {
-			fmt.Print("create database")
-			if _, err := db.CreateCollection(nil, goalsColName, &driver.CreateCollectionOptions{
-				Type: driver.CollectionTypeEdge,
-			}); err != nil {
-				fmt.Print("sddfff")
-				fmt.Println(err)
+func initDatabaseDriver(user string, password string) {
+	if conn, err := http.NewConnection(http.ConnectionConfig{
+		Endpoints: []string{"http://" + host + ":" + strconv.Itoa(port)},
+	}); err == nil {
+		if client, err := driver.NewClient(driver.ClientConfig{
+			Connection:     conn,
+			Authentication: driver.BasicAuthentication(user, password),
+		}); err == nil {
+			if dbExists, e := client.DatabaseExists(nil, databaseName); !dbExists && e == nil {
+				if database, err = client.CreateDatabase(nil, databaseName, &driver.CreateDatabaseOptions{
+					[]driver.CreateDatabaseUserOptions{
+						{
+							UserName: user,
+						},
+					},
+				}); err != nil {
+					log.Fatal(err)
+					return
+				}
+				log.Println("Connected to database: " + databaseName)
+				Collection(goalsColName)
+				Collection(matchesColName)
+			} else if e != nil {
+				log.Println(e)
+			} else {
+				database, err = client.Database(nil, databaseName)
+				Collection(goalsColName)
+				Collection(matchesColName)
 			}
-			db.CreateCollection(nil, matchesColName, &driver.CreateCollectionOptions{
-				Type: driver.CollectionTypeDocument,
-			})
-			fmt.Print("create database")
+			if err != nil {
+				log.Println(err)
+			}
 		} else {
-			log.Print(err)
+			log.Println(err)
 		}
-		db, _ = c.Database(nil, "iaf-matches")
-
-		//database.CreateGraph(nil, graphMatches, &driver.CreateGraphOptions{OrphanVertexCollections: {
-		//	[1]string{collectionsMatches},
-		//}
-		//})
+	} else {
+		log.Println(err)
 	}
-	return db
 }
 
-func Col(collection string) driver.Collection {
-	log.Println("Open collection: " + collection)
-	if database != nil {
-		col, err := database.Collection(nil, collection)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return col
+func Collection(name string) driver.Collection {
+	if database == nil {
+		InitDatabase(host, port, databaseUser, databasePassword)
 	} else {
-		panic("No database!!!")
+		if name == matchesColName && matchesCol == nil {
+			matchesCol = initCollection(name, 2)
+			return matchesCol
+		} else if name == matchesColName {
+			return matchesCol
+		}
+		if name == goalsColName && goalsCol == nil {
+			goalsCol = initCollection(name, 3)
+			return goalsCol
+		} else if name == goalsColName {
+			return goalsCol
+		}
 	}
+	return nil
+}
+
+func initCollection(name string, colType int) driver.Collection {
+	if exists, err := database.CollectionExists(nil, name); !exists {
+		if col, e := database.CreateCollection(nil, name, &driver.CreateCollectionOptions{
+			Type: driver.CollectionType(colType),
+		}); e != nil {
+			return col
+		} else {
+			log.Println(err)
+		}
+	} else if err != nil {
+		log.Println(err)
+	} else {
+
+		if col, err := database.Collection(nil, name); err == nil {
+			return col
+		} else {
+			log.Println(err)
+		}
+	}
+	return nil
 }
