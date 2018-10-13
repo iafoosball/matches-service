@@ -18,7 +18,7 @@ services:
     - ARANGO_ROOT_PASSWORD=matches-password
 
     volumes:
-    - /var/lib/arangodb-matches-persistent:/var/lib/arangodb3
+    - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
 
 #  swagger-ui:
 #    container_name: "matches-swagger"

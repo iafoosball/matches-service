@@ -107,7 +107,7 @@ func initCollection(name string, colType int) driver.Collection {
 			Type: driver.CollectionType(colType),
 		}); e != nil {
 			return col
-		} else {
+		} else if err != nil {
 			log.Println(err)
 		}
 	} else if err != nil {
