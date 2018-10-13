@@ -4,15 +4,12 @@
 swagger: "2.0"
 info:
   description: "The matches service of IAFoosball"
-  version: "1.0.0"
-  title: "Swagger Matches-Service"
-  termsOfService: "http://iafoosball.io/terms/"
-#  contact:
-#    email: "jonas.burster@gmail.com"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "0.0.0.0:4450"
+  version: "2.0.x"
+  title: "Matches-Service"
+  termsOfService: "http://iafoosball.aau.dk/terms/"
+  contact:
+    email: "jonas.burster@gmail.com"
+host: "iafoosball.aau.dk"
 schemes:
 - "http"
 produces:
@@ -88,21 +85,23 @@ paths:
 definitions:
   Goal:
     type: object
-    required:
-      - _from
     properties:
+      _id:
+        type: string
+        description: The goal id, which is the collection + "/" + the key
+        example: "goals/01234"
       _key:
         type: string
-        description: The match id
-        example: "0123456789"
+        description: The goal key
+        example: "012345"
       _from:
         type: string
         description: The match id
         example: "matches/01234"
       _to:
         type: string
-        description: The match id
-        example: "matches/56789"
+        description: Same as from
+        example: "matches/01234"
       goal_id:
         type: string
         description: The unique match id.
@@ -120,6 +119,14 @@ definitions:
   Match:
     type: object
     properties:
+      _id:
+        type: string
+        description: The match id which is the collection + "/" + the key
+        example: "matches/01234"
+      _key:
+        type: string
+        description: The match key
+        example: "012345"
       blue_user_id_one:
         type: string
         description: This is the user id of the first player playing on the blue side.

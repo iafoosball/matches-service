@@ -1,45 +1,24 @@
 package matches
 
 import (
+	"bytes"
+	"encoding/json"
+	"github.com/iafoosball/matches-service/models"
+	"log"
+	"net/http"
 	"testing"
 )
 
-func TestCreateGoal(t *testing.T) {
-	//_, metaMatches := CreateMatch(models.Match{})
-	//s := metaMatches.ID.String()
-	//fmt.Println(metaMatches.ID)
-	//_, metaGoals := CreateGoal(models.Goal{
-	//	Datetime: "123123",
-	//	From:     &s,
-	//	To:       s,
-	//})
-	//fmt.Print("The goal metaGoals data")
-	//fmt.Println(metaGoals)
-	//if created, _ := goalsCol.DocumentExists(nil, metaGoals.Key); created == false {
-	//	log.Fatal("Document was not created")
-	//}
-	//fmt.Println(goalsCol.RemoveDocument(nil, metaGoals.Key))
-	//fmt.Println(matchesCol.RemoveDocument(nil, metaMatches.Key))
-}
-
-func BenchmarkCreateGoal(b *testing.B) {
-	//for n := 0; n < b.N; n++ {
-	//	_, metaMatches := CreateMatch(models.Match{})
-	//	s := metaMatches.ID.String()
-	//	//fmt.Println(metaMatches.ID)
-	//	_, metaGoals := CreateGoal(models.Goal{
-	//		Datetime: "123123",
-	//		From:     &s,
-	//		To:       s,
-	//	})
-	//	//fmt.Print("The goal metaGoals data")
-	//	//fmt.Println(metaGoals)
-	//	if created, _ := goalsCol.DocumentExists(nil, metaGoals.Key); created == false {
-	//		log.Fatal("Document was not created")
-	//	}
-	//	//fmt.Println(goalsCol.RemoveDocument(nil, metaGoals.Key))
-	//	//fmt.Println(matchesCol.RemoveDocument(nil, metaMatches.Key))
-	//}
-	//fmt.Println(b)
-
+func TestCreateGoal(*testing.T) {
+	setup()
+	jsonGoal, _ := json.Marshal(models.Goal{
+		ID:   "goals/1",
+		Key:  "1",
+		From: "matches/test1",
+		To:   "matches/test1",
+	})
+	if resp, err := http.Post("http://0.0.0.0:9000/goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
+		log.Println(resp)
+		log.Fatal(err)
+	}
 }
