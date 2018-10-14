@@ -19,22 +19,16 @@ pipeline {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
         COMPOSE_FILE = "docker-compose.yml"
 
-        def jobname = "matches"
-        def currentJob = Jenkins.instance.getItemByFullName(jobname)
 
-        for (def build : currentJob.builds) {
-            /* If there is a build that is currently running and it's not current build */
-            if (build.isBuilding() && build.number.toInteger() != buildNumber) {
-                   def oldBuild = build.number.toInteger()
-            }
-        }
+        currentJob = Jenkins.instance.getItemByFullName(${env.JOB_NAME})
+
+
 
     }
     stages {
         stage ("Prepare environment") {
             steps {
-                sh "echo $jobname"
-                sh "echo $oldBuild"
+                sh "echo $COMPOSE_PROJECT_NAME"
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
