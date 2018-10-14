@@ -25,13 +25,11 @@ pipeline {
 
 
     }
-    node {
-        echo $COMPOSE_PROJECT_NAME
-    }
+
     stages {
         stage ("Prepare environment") {
             steps {
-
+                COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
