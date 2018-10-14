@@ -14,6 +14,10 @@ import (
 // TODO: Should we have a file for unit tests (which are sort of small integration tests and then this file for integration and benchmarking and possible other tests? Lets have a meeting :D :)
 
 // used by all test classes in package matches
+const (
+	urlTesting = "http://0.0.0.0:8000/"
+)
+
 func setup() {
 	log.SetFlags(log.Ltime | log.Lshortfile)
 }
@@ -27,7 +31,7 @@ func TestGraph(*testing.T) {
 		RatedMatch:     true,
 		PositionAttack: true,
 	})
-	if resp, err := http.Post("http://0.0.0.0:9000/matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(urlTesting+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
@@ -39,7 +43,7 @@ func TestGraph(*testing.T) {
 			From: "matches/test3",
 			To:   "matches/test3",
 		})
-		if resp, err := http.Post("http://0.0.0.0:9000/goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
+		if resp, err := http.Post(urlTesting+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
 			log.Fatal(err)
 		}

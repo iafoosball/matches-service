@@ -5,12 +5,11 @@ pipeline {
     }
 
     stages {
-        stage ("Prepare environment") {
+        stage ("Prepare stag environment") {
             steps {
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
-                sh "docker stop matches-service &"
-                sh "docker stop matches-arangodb &"
+
                 sh "docker-compose rm -f"
             }
         }
@@ -22,6 +21,8 @@ pipeline {
         }
         stage ("Test") {
             steps {
+                sh "docker stop matches-service-stag &"
+                sh "docker stop matches-arangodb-stag &"
                 sh "docker-compose up --force-recreate -d"
                 sh "sleep 30s"
                 sh "docker cp matches-service:/root/matches.test ."
@@ -29,9 +30,22 @@ pipeline {
                 sh "docker-compose down"
             }
         }
+        stage ("Staging") {
+                    steps {
+                        sh "docker-compose up -d"
+                    }
+                }
+        stage ("Prepare prod environment") {
+                    steps {
+                        sh "rm docker-compose.yml && rm Dockerfile"
+                        sh "cp ../iaf-configs/matches-service/prod/docker-compose.yml . && cp ../iaf-configs/matches-service/prod/Dockerfile ."
+                    }
+                }
         stage ("Production") {
             steps {
-                sh "docker-compose up"
+                sh "docker stop matches-service-prod &"
+                sh "docker stop matches-arangodb-prod &"
+                sh "docker-compose up --force-recreate"
             }
         }
     }
