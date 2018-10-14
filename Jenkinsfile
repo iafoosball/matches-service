@@ -1,23 +1,12 @@
-node {
-    def cancelPreviousBuilds() {
-                       def jobName = env.JOB_NAME
-                       def buildNumber = env.BUILD_NUMBER.toInteger()
-                       /* Get job name */
-                       def currentJob = Jenkins.instance.getItemByFullName(jobName)
+pipeline {
 
-                       /* Iterating over the builds for specific job */
-                       for (def build : currentJob.builds) {
-                           /* If there is a build that is currently running and it's not current build */
-                           if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
-                               /* Than stopping it */
-                               build.doStop()
-                           }
-                       }
-                   }
     agent any
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
         COMPOSE_FILE = "docker-compose.yml"
+    }
+    options {
+            disableConcurrentBuilds()
     }
     stages {
         stage ("Prepare environment") {
