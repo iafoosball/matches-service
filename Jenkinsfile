@@ -16,20 +16,12 @@ def cancelPreviousBuilds() {
 pipeline {
     agent any
     environment {
-        COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
         COMPOSE_FILE = "docker-compose.yml"
-
-
-        currentJob = Jenkins.instance.getItemByFullName(${env.JOB_NAME})
-
-
-
     }
 
     stages {
         stage ("Prepare environment") {
             steps {
-                COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
