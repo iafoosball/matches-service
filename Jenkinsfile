@@ -1,4 +1,3 @@
-pipeline {
     @NonCPS
     void cancelPreviousRunningBuilds(int maxBuildsToSearch = 20) {
         RunWrapper b = currentBuild
@@ -11,6 +10,7 @@ pipeline {
             }
         }
     }
+pipeline {
     agent any
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
