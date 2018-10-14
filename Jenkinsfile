@@ -35,6 +35,7 @@ pipeline {
                     steps {
                         sh "rm docker-compose.yml && rm Dockerfile"
                         sh "cp ../iaf-configs/matches-service/prod/docker-compose.yml . && cp ../iaf-configs/matches-service/prod/Dockerfile ."
+                        sh "cp -rf matches.yml /var/lib/iafoosball/swagger-ui/ &"
                     }
                 }
         stage ("Production") {
