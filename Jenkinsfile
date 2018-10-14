@@ -6,6 +6,12 @@ pipeline {
         COMPOSE_FILE = "docker-compose.yml"
     }
     stages {
+        stage ("Copy Compose and Dockerfile") {
+            steps {
+            sh "rm docker-compose.yml && rm Dockerfile"
+            sh "copy ../iaf-configs/matches-service/docker-compose.yml . && copy ../iaf-configs/matches-service/Dockerfile ."
+            }
+        }
         stage ("Build") {
             steps {
             sh "docker-compose build --pull"
