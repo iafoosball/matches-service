@@ -1,4 +1,3 @@
-@NonCPS
 def cancelPreviousBuilds() {
     def jobName = env.JOB_NAME
     def buildNumber = env.BUILD_NUMBER.toInteger()
@@ -23,7 +22,16 @@ pipeline {
     stages {
         stage ("Prepare environment") {
             steps {
-                milestone(ordinal: 1, label: "PREPARE_ENV_MILESTONE")
+                def jobname = env.JOB_NAME
+                echo jobname
+                def job = Jenkins.instance.getItemByFullName(jobname)
+                for (def build : currentJob.builds) {
+                    /* If there is a build that is currently running and it's not current build */
+                    if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
+                           sh "curl -X GET http://localhost:8030/matches $build.number.toInteger()"
+                    }
+                }
+
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
                 sh "docker-compose rm -f"
@@ -31,7 +39,6 @@ pipeline {
         }
         stage ("Build") {
             steps{
-                milestone(ordinal: 2, label: "BUILD_MILESTONE")
                 sh "docker-compose build --pull"
                 sh "docker cp matches-service:/root/matches.test ."
                 sh "docker cp matches-service:/root/maimatches-service ."
@@ -39,7 +46,6 @@ pipeline {
         }
         stage ("Test") {
             steps {
-                milestone(ordinal: 3, label: "TEST_ENV_MILESTONE")
                 sh "docker-compose up --force-recreate -d"
                 sh "sleep 30s"
                 sh "./matches.test"
