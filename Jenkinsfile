@@ -10,7 +10,7 @@ pipeline {
             steps {
             sh "rm docker-compose.yml && rm Dockerfile"
             sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
-            sh "docker-compose rm -f
+            sh "docker-compose rm -f"
             }
         }
         stage ("Staging") {
