@@ -7,7 +7,7 @@ def cancelPreviousBuilds() {
     /* Iterating over the builds for specific job */
     for (def build : currentJob.builds) {
         /* If there is a build that is currently running and it's not current build */
-        if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
+        if (build.isBuilding() && build.number.toInteger() != buildNumber) {
             /* Than stopping it */
             build.doKill()
         }
@@ -18,14 +18,16 @@ pipeline {
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
         COMPOSE_FILE = "docker-compose.yml"
+
+
     }
     stages {
         stage ("Prepare environment") {
             steps {
                 script {
-                    def jobname = env.JOB_NAME
+
                     echo jobname
-                    def job = Jenkins.instance.getItemByFullName(jobname)
+
                     for (def build : currentJob.builds) {
                         /* If there is a build that is currently running and it's not current build */
                         if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
