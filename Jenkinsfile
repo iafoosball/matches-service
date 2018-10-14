@@ -17,22 +17,20 @@ pipeline {
 
             }
         }
-        stage ("Test") {
-            steps {
-                sh "docker stop matches-service-stag &"
-                sh "docker stop matches-arangodb-stag &"
-                sh "docker-compose up --force-recreate -d"
-                sh "sleep 30s"
-                sh "docker cp matches-service:/root/matches.test ."
-                sh "./matches.test"
-                sh "docker-compose down"
-            }
-        }
         stage ("Staging") {
                     steps {
+                        sh "docker stop matches-service-stag &"
+                        sh "docker stop matches-arangodb-stag &"
                         sh "docker-compose up -d"
+                        sh "sleep 30s"
                     }
                 }
+        stage ("Test") {
+            steps {
+                sh "docker cp matches-service:/root/matches.test ."
+                sh "./matches.test"
+            }
+        }
         stage ("Prepare prod environment") {
                     steps {
                         sh "rm docker-compose.yml && rm Dockerfile"
