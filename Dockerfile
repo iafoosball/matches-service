@@ -9,7 +9,9 @@ RUN chmod +x /usr/bin/dep
 #Download the service
 RUN mkdir -p /go/src/github.com/iafoosball
 WORKDIR /go/src/github.com/iafoosball
-RUN git clone https://github.com/iafoosball/matches-service.git
+#RUN git clone -b 'v1.0.1' --single-branch https://github.com/iafoosball/users-service.git
+#Used as a workaround for copying.
+COPY . /go/src/github.com/iafoosball/matches-service
 WORKDIR /go/src/github.com/iafoosball/matches-service
 
 #Download and install swagger in go and run codegen
