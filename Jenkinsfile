@@ -26,15 +26,6 @@ pipeline {
             steps {
                 script {
 
-                    echo jobname
-
-                    for (def build : currentJob.builds) {
-                        /* If there is a build that is currently running and it's not current build */
-                        if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
-                               sh "curl -X GET http://localhost:8030/matches $build.number.toInteger()"
-                        }
-                    }
-                 }
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
