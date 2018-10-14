@@ -16,8 +16,8 @@ pipeline {
         stage ("Build") {
             steps{
                 sh "docker-compose build --pull"
-                sh "docker cp matches-service:/root/matches.test ."
-                sh "docker cp matches-service:/root/maimatches-service ."
+                sh "docker cp matches-service:/matches.test ."
+                sh "docker cp matches-service:/maimatches-service ."
             }
         }
         stage ("Test") {
