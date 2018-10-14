@@ -15,8 +15,8 @@ pipeline {
         stage ("Staging") {
             steps {
             sh "docker-compose build --pull"
-            sh "docker-compose up --force-recreate "
-
+            sh "docker-compose up --force-recreate -d"
+            sh "sleep 60s"
             sh "cd matches/ && go test"
             sh "cd ../ && docker-compose down"
             }
