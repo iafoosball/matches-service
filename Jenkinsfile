@@ -22,7 +22,7 @@ pipeline {
                         sh "docker stop matches-service-stag &"
                         sh "docker stop matches-arangodb-stag &"
                         sh "docker-compose up -d"
-                        sh "sleep 20s"
+                        sh "sleep 100s"
                     }
                 }
         stage ("Test") {
