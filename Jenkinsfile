@@ -9,7 +9,7 @@ pipeline {
             steps {
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
-                sh "docker-compose down -v"
+                sh "docker stop matches-service  && docker stop matches-arangodb"
                 sh "docker-compose rm -f"
             }
         }
