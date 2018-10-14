@@ -23,8 +23,8 @@ pipeline {
             steps {
                 sh "docker-compose up --force-recreate -d"
                 sh "sleep 30s"
-                sh "docker cp matches-service:/matches.test ."
-                sh "docker cp matches-service:/maimatches-service ."
+                sh "docker cp matches-service:/root/matches.test ."
+                sh "docker cp matches-service:/root/maimatches-service ."
                 sh "./matches.test"
                 sh "docker-compose down"
             }
