@@ -29,8 +29,27 @@ pipeline {
             }
         }
         stage ("Production") {
+             steps {
+               def cancelPreviousBuilds() {
+                   def jobName = env.JOB_NAME
+                   def buildNumber = env.BUILD_NUMBER.toInteger()
+                   /* Get job name */
+                   def currentJob = Jenkins.instance.getItemByFullName(jobName)
+
+                   /* Iterating over the builds for specific job */
+                   for (def build : currentJob.builds) {
+                       /* If there is a build that is currently running and it's not current build */
+                       if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
+                           /* Than stopping it */
+                           build.doStop()
+                       }
+                   }
+               }
+            }
+        }
+        stage ("Production") {
             steps {
-            sh "docker-compose up"
+                sh "docker-compose up"
             }
         }
     }
