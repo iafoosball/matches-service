@@ -13,19 +13,22 @@ pipeline {
             sh "docker-compose rm -f"
             }
         }
-        stage ("Staging") {
-            steps {
+        stage ("Build") {
             sh "docker-compose build --pull"
+            sh "docker cp matches-service:/root/matches.test ."
+            sh "docker cp matches-service:/root/main ."
+        }
+        stage ("Test") {
+            steps {
             sh "docker-compose up --force-recreate -d"
             sh "sleep 30s"
-            sh "docker cp matches-service:/root/matches.test ."
             sh "./matches.test"
             sh "docker-compose down"
             }
         }
-        stage ("Deploy") {
+        stage ("Production") {
             steps {
-            sh "docker-compose up --force-recreate"
+            sh "docker-compose up"
             }
         }
     }
