@@ -1,15 +1,3 @@
-    @NonCPS
-    void cancelPreviousRunningBuilds(int maxBuildsToSearch = 20) {
-        RunWrapper b = currentBuild
-        for (int i=0; i<maxBuildsToSearch; i++) {
-            b = b.getPreviousBuild();
-            if (b == null) break;
-            Run<?,?> rawBuild = b.rawBuild
-            if (rawBuild.isBuilding()) {
-                rawBuild.doStop()
-            }
-        }
-    }
 pipeline {
     agent any
     environment {
@@ -22,9 +10,10 @@ pipeline {
     stages {
         stage ("Prepare environment") {
             steps {
-            sh "rm docker-compose.yml && rm Dockerfile"
-            sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
-            sh "docker-compose rm -f"
+                milestone(ordinal: 1, label: "PREPARE_ENV_MILESTONE")
+                sh "rm docker-compose.yml && rm Dockerfile"
+                sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
+                sh "docker-compose rm -f"
             }
         }
         stage ("Build") {
