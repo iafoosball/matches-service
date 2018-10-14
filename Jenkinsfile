@@ -19,12 +19,20 @@ pipeline {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
         COMPOSE_FILE = "docker-compose.yml"
 
+        def jobname = env.JOB_NAME
+        def buildNumber = env.BUILD_NUMBER.toInteger()
+        def job = Jenkins.instance.getItemByFullName(jobname)
+        for (def build : currentJob.builds) {
+            /* If there is a build that is currently running and it's not current build */
+            if (build.isBuilding() && build.number.toInteger() != buildNumber) {
+                   def oldBuild = build.number.toInteger()
+            }
+        }
 
     }
     stages {
         stage ("Prepare environment") {
             steps {
-                script {
 
 
                 sh "rm docker-compose.yml && rm Dockerfile"
