@@ -30,4 +30,4 @@ services:
 networks: 
   default:
     external:
-      name: kong_default
+      name: kong_iafoosball
