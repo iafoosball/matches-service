@@ -17,7 +17,7 @@ pipeline {
             sh "docker-compose build --pull"
             sh "docker-compose up --force-recreate -d"
             sh "sleep 60s"
-            sh "docker matches-service:/matches.test .
+            sh "docker matches-service:/matches.test ."
             sh "./matches.test"
             sh "docker-compose down"
             }
