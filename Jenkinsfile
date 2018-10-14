@@ -1,18 +1,3 @@
-def cancelPreviousBuilds() {
-    def jobName = env.JOB_NAME
-    def buildNumber = env.BUILD_NUMBER.toInteger()
-    /* Get job name */
-    def currentJob = Jenkins.instance.getItemByFullName(jobName)
-
-    /* Iterating over the builds for specific job */
-    for (def build : currentJob.builds) {
-        /* If there is a build that is currently running and it's not current build */
-        if (build.isBuilding() && build.number.toInteger() != buildNumber) {
-            /* Than stopping it */
-            build.doKill()
-        }
-    }
-}
 pipeline {
     agent any
     environment {
@@ -22,9 +7,11 @@ pipeline {
     stages {
         stage ("Prepare environment") {
             steps {
-
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
+                sh "docker-compose down -v"
+                sh "docker rm $(docker ps -a -q)"
+                sh "docker rmi $(docker images -q)"
                 sh "docker-compose rm -f"
             }
         }
