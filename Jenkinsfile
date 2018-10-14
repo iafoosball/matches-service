@@ -10,7 +10,7 @@ def cancelPreviousBuilds() {
         /* If there is a build that is currently running and it's not current build */
         if (build.isBuilding() && build.number.toInteger() != buildsNumber) {
             /* Than stopping it */
-            build.doStop()
+            build.doKill()
         }
     }
 }
