@@ -1,14 +1,22 @@
 package matches
 
 import (
-	"github.com/arangodb/go-driver"
-	"github.com/iafoosball/matches-service/models"
+	"encoding/json"
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/iafoosball/matches-service/restapi/operations"
+	"log"
 )
 
-func CreateGoal(goal models.Goal) (*operations.PostGoalsOK, driver.DocumentMeta) {
-	meta, _ := goalsCol.CreateDocument(nil, &goal)
-	return operations.NewPostGoalsOK(), meta
+// Has test
+func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
+	return func(params operations.PostGoalsParams) middleware.Responder {
+		if _, err := Collection(goalsColName).CreateDocument(nil, &params.Body); err != nil {
+			request, _ := json.Marshal(params.Body)
+			log.Println(string(request))
+			log.Println(err)
+		}
+		return operations.NewPostGoalsOK()
+	}
 }
 
 //func GetGoal(id string) (*operations.GetGoalsGoalID) middleware.Responder{

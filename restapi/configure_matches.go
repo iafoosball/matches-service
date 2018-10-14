@@ -43,12 +43,15 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 	// Example:
 	// api.Logger = log.Printf
 
+	log.SetFlags(log.Ltime | log.Lshortfile)
+	matches.InitDatabase(ConfigurationFlags.DatabaseHost, ConfigurationFlags.DatabasePort, ConfigurationFlags.DatabaseUser, ConfigurationFlags.DatabasePassword)
+
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
 
 	//[Start: Goals end points]
-	//api.PostGoalsHandler = operations.PostGoalsHandlerFunc(api.CreateGoal())
+	api.PostGoalsHandler = operations.PostGoalsHandlerFunc(matches.CreateGoal())
 	//[End: Goals end points]
 
 	//[Start: Matches end points]
@@ -70,8 +73,6 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
-	log.SetFlags(log.Ltime | log.Lshortfile)
-	matches.InitDatabase(ConfigurationFlags.DatabaseHost, ConfigurationFlags.DatabasePort, ConfigurationFlags.DatabaseUser, ConfigurationFlags.DatabasePassword)
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

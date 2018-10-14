@@ -3,7 +3,7 @@ services:
   matches-service:
     build: './'
     ports:
-      - 9000:4444
+      - 9000:9000
     links:
       - arangodb
     depends_on:
@@ -16,12 +16,5 @@ services:
       - 9001:8529
     environment:
     - ARANGO_ROOT_PASSWORD=matches-password
-
     volumes:
     - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
-
-#  swagger-ui:
-#    container_name: "matches-swagger"
-#    build: './swagger-ui/'
-#    ports:
-#      - 9002:8080
