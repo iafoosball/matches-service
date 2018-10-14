@@ -9,7 +9,7 @@ pipeline {
         stage ("Copy Compose and Dockerfile") {
             steps {
             sh "rm docker-compose.yml && rm Dockerfile"
-            sh "cp ../iaf-configs/matches/docker-compose.yml . && cp ../iaf-configs/matches/Dockerfile ."
+            sh "cp ../iaf-configs/matches-service/docker-compose.yml . && cp ../iaf-configs/matches-service/Dockerfile ."
             }
         }
         stage ("Build") {
