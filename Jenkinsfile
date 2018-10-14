@@ -1,5 +1,16 @@
 pipeline {
-
+    @NonCPS
+    void cancelPreviousRunningBuilds(int maxBuildsToSearch = 20) {
+        RunWrapper b = currentBuild
+        for (int i=0; i<maxBuildsToSearch; i++) {
+            b = b.getPreviousBuild();
+            if (b == null) break;
+            Run<?,?> rawBuild = b.rawBuild
+            if (rawBuild.isBuilding()) {
+                rawBuild.doStop()
+            }
+        }
+    }
     agent any
     environment {
         COMPOSE_PROJECT_NAME = "${env.JOB_NAME}-${env.BUILD_ID}"
@@ -14,7 +25,6 @@ pipeline {
             sh "rm docker-compose.yml && rm Dockerfile"
             sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
             sh "docker-compose rm -f"
-            milestone()
             }
         }
         stage ("Build") {
@@ -26,7 +36,6 @@ pipeline {
         }
         stage ("Test") {
             steps {
-                milestone()
                 sh "docker-compose up --force-recreate -d"
                 sh "sleep 30s"
                 sh "./matches.test"
