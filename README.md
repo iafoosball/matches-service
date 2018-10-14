@@ -42,6 +42,7 @@ Should we integrate godocs? Can be easily produced via
 They don't provide any real value. Just leaving it here as food for thought.
 <br />
 <br />
+Add central swagger ui serer and documentation
 
 
 
