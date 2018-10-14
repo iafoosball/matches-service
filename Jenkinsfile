@@ -10,8 +10,6 @@ pipeline {
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
                 sh "docker-compose down -v"
-                sh "docker rm $(docker ps -a -q)"
-                sh "docker rmi $(docker images -q)"
                 sh "docker-compose rm -f"
             }
         }
@@ -38,7 +36,7 @@ pipeline {
     }
     post {
         always {
-            sh "docker-compose down -v"
+            sh "docker-compose down -v --rmi 'all'"
         }
     }
 }
