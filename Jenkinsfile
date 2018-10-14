@@ -14,6 +14,7 @@ pipeline {
             sh "rm docker-compose.yml && rm Dockerfile"
             sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
             sh "docker-compose rm -f"
+            milestone()
             }
         }
         stage ("Build") {
@@ -25,6 +26,7 @@ pipeline {
         }
         stage ("Test") {
             steps {
+                milestone()
                 sh "docker-compose up --force-recreate -d"
                 sh "sleep 30s"
                 sh "./matches.test"
