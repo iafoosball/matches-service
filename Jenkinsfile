@@ -6,18 +6,20 @@ pipeline {
         COMPOSE_FILE = "docker-compose.yml"
     }
     stages {
-        stage ("Copy Compose and Dockerfile") {
+        stage ("Prepare environment") {
             steps {
             sh "rm docker-compose.yml && rm Dockerfile"
-            sh "cp ../iaf-configs/matches-service/docker-compose.yml . && cp ../iaf-configs/matches-service/Dockerfile ."
+            sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/stag/matches-service/Dockerfile ."
             }
         }
-        stage ("Build") {
+        stage ("Staging") {
             steps {
             sh "docker-compose build --pull"
+            sh "docker-compose up --force-recreate -d"
+            sh "cd matches/ && go test"
+            sh "cd ../ && docker-compose down"
             }
         }
-
         stage ("Deploy") {
             steps {
             sh "docker-compose up --force-recreate"
