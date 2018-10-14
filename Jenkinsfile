@@ -1,4 +1,4 @@
-pipeline {
+node {
     def cancelPreviousBuilds() {
                        def jobName = env.JOB_NAME
                        def buildNumber = env.BUILD_NUMBER.toInteger()
