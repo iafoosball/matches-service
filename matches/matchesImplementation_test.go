@@ -18,7 +18,7 @@ func TestCreateMatch(*testing.T) {
 		RatedMatch:     true,
 		PositionAttack: true,
 	})
-	if resp, err := http.Post(urlTesting+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func BenchmarkCreateMatch(b *testing.B) {
 			RatedMatch:     true,
 			PositionAttack: true,
 		})
-		if resp, err := http.Post(urlTesting+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+		if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
 			log.Fatal(err)
 		}

@@ -17,13 +17,13 @@
   branch = "master"
   name = "github.com/arangodb/go-driver"
   packages = [".","cluster","http","util"]
-  revision = "3f4e3265ee5f74b6b848161c561af6e21933a70c"
+  revision = "88874b717ad9582bb274e06a2ff75428fe66c7cc"
 
 [[projects]]
   branch = "master"
   name = "github.com/arangodb/go-velocypack"
   packages = ["."]
-  revision = "c899a2a2271f97f297fd70afd031e5ffb9497f83"
+  revision = "d177e34556914e6a2c0ddb68f6faa8d517e7602f"
 
 [[projects]]
   name = "github.com/asaskevich/govalidator"
@@ -40,8 +40,8 @@
 [[projects]]
   name = "github.com/go-openapi/analysis"
   packages = [".","internal"]
-  revision = "7c1bef8f6d9fa6148ce0d8a0ebf5339a084a6639"
-  version = "0.16.0"
+  revision = "c701774f4e604d952e4e8c56dee260be696e33c3"
+  version = "v0.17.0"
 
 [[projects]]
   name = "github.com/go-openapi/errors"
@@ -52,14 +52,14 @@
 [[projects]]
   name = "github.com/go-openapi/jsonpointer"
   packages = ["."]
-  revision = "3a0015ad55fa9873f41605d3e8f28cd279c32ab2"
-  version = "0.16.0"
+  revision = "ef5f0afec364d3b9396b7b77b43dbe26bf1f8004"
+  version = "v0.17.0"
 
 [[projects]]
   name = "github.com/go-openapi/jsonreference"
   packages = ["."]
-  revision = "3fb327e6747da3043567ee86abd02bb6376b6be2"
-  version = "0.16.0"
+  revision = "8483a886a90412cd6858df4ea3483dce9c8e35a3"
+  version = "v0.17.0"
 
 [[projects]]
   name = "github.com/go-openapi/loads"
@@ -94,8 +94,8 @@
 [[projects]]
   name = "github.com/go-openapi/validate"
   packages = ["."]
-  revision = "7c1911976134d3a24d0c03127505163c9f16aa3b"
-  version = "0.16.0"
+  revision = "d2eab7d93009e9215fc85b2faa2c2f2a98c2af48"
+  version = "v0.17.0"
 
 [[projects]]
   name = "github.com/jessevdk/go-flags"
@@ -112,20 +112,14 @@
 [[projects]]
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "fa473d140ef3c6adf42d6b391fe76707f1f243c8"
-  version = "v1.0.0"
-
-[[projects]]
-  name = "github.com/tylerb/graceful"
-  packages = ["."]
-  revision = "4654dfbb6ad53cb5e27f37d99b02e16c1872fbbb"
-  version = "v1.2.15"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context","idna"]
-  revision = "161cd47e91fd58ac17490ef4d742dc98bb4cf60e"
+  packages = ["context","idna","netutil"]
+  revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -148,6 +142,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7373f70e2209c6a18e69a5323fe5770fde262b66bb391e8170bd7d580c605b2d"
+  inputs-digest = "2fedd5b31730101f68ff3958919098233cd7dc977f9554ac96598fb4fa230ccb"
   solver-name = "gps-cdcl"
   solver-version = 1

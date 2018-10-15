@@ -3,6 +3,7 @@ package matches
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"github.com/iafoosball/matches-service/models"
 	"log"
 	"net/http"
@@ -14,12 +15,23 @@ import (
 // TODO: Should we have a file for unit tests (which are sort of small integration tests and then this file for integration and benchmarking and possible other tests? Lets have a meeting :D :)
 
 // used by all test classes in package matches
-const (
-	urlTesting = "http://0.0.0.0:8000/"
+var (
+	testHost string
+	testPort int
+	testUrl  string
 )
 
-func setup() {
+func init() {
 	log.SetFlags(log.Ltime | log.Lshortfile)
+	flag.StringVar(&testHost, "testHost", "0.0.0.0", "the test host")
+	testPort = *flag.Int("testPort", 8000, "the port of the matches service where the test should connect")
+	flag.Parse()
+	testUrl = "http://" + testHost + ":" + strconv.Itoa(testPort) + "/"
+	log.Println(testUrl)
+}
+
+func setup() {
+
 }
 
 func TestGraph(*testing.T) {
@@ -31,7 +43,7 @@ func TestGraph(*testing.T) {
 		RatedMatch:     true,
 		PositionAttack: true,
 	})
-	if resp, err := http.Post(urlTesting+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
@@ -43,7 +55,7 @@ func TestGraph(*testing.T) {
 			From: "matches/test3",
 			To:   "matches/test3",
 		})
-		if resp, err := http.Post(urlTesting+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
+		if resp, err := http.Post(testUrl+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
 			log.Fatal(err)
 		}
