@@ -32,7 +32,9 @@ From inside the matches-service folder, where the `matches.yml` file and
 Finally, make the `startMatches.sh` file executable and execute it by using `chmod +x startMatches.sh && ./startMatches.sh`  <br />
 This will start an the database (ArangoDB) and 
 
-
+## Others
+#### Produce a dependency map
+https://golang.github.io/dep/docs/daily-dep.html#visualizing-dependencies <br />
 
 
 ## TODOS
@@ -43,6 +45,8 @@ They don't provide any real value. Just leaving it here as food for thought.
 <br />
 <br />
 Add central swagger ui serer and documentation
+
+
 
 
 
