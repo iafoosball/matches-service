@@ -127,24 +127,52 @@ definitions:
         type: string
         description: The match key
         example: "012345"
-      blue_user_id_one:
+      start_time:
+        type: string
+        description: the datetime when the game ends
+      end_time:
+        type: string
+        description: the datetime when the match ends
+      completed:
+        type: boolean
+        description: Was the game completed.
+      max_goals:
+        type: int
+        description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
+      max_time:
+        type: int
+        description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
+      blue_user_one_id:
         type: string
         description: This is the user id of the first player playing on the blue side.
-      blue_user_id_two:
+      blue_user_one_position:
+        type: array
+        description: The position of the blue user 1. As this can vary during a game, use the notatation datetime\position
+        example: [12341234/attack,12341245/defense]
+      blue_user_two_id:
         type: string
         description: This is the user id of the second player playing on the blue side. (Not used in single)
-      red_user_id_one:
+      blue_user_two_position:
+        type: array
+        description: The position of the blue user 2. As this can vary during a game, use the notatation datetime\position
+        example: [12341234/attack,12341245/defense]
+      red_user_one_id:
         type: string
         description: This is the user id of the first player playing on the red side.
-      red_user_id_two:
+      red_user_one_position:
+        type: array
+        description: The position of the red user 1. As this can vary during a game, use the notatation datetime\position
+        example: [12341234/attack,12341245/defense]
+      red_user_two_id:
         type: string
         description: This is the user id of the second player playing on the red side. (Not used in single)
+      red_user_two_position:
+        type: array
+        description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
+        example: [12341234/attack,12341245/defense]
       rated_match:
         type: boolean
         description: A match can be rated, ie a ranked game with points, or without.
-      position_attack:
-        type: boolean
-        description: If the match is a double, the position can be attack. (Not used at the moment)
 
 
 
