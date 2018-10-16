@@ -17,16 +17,16 @@ import (
 // used by all test classes in package matches
 var (
 	testHost string
-	testPort int
+	testPort string
 	testUrl  string
 )
 
 func init() {
 	log.SetFlags(log.Ltime | log.Lshortfile)
 	flag.StringVar(&testHost, "testHost", "0.0.0.0", "the test host")
-	testPort = *flag.Int("testPort", 8000, "the port of the matches service where the test should connect")
+	flag.StringVar(&testPort, "testPort", "8000", "the port of the matches service where the test should connect")
 	flag.Parse()
-	testUrl = "http://" + testHost + ":" + strconv.Itoa(testPort) + "/"
+	testUrl = "http://" + testHost + ":" + testPort + "/"
 	log.Println(testUrl)
 }
 
@@ -38,10 +38,9 @@ func TestGraph(*testing.T) {
 	setup()
 
 	jsonObject, _ := json.Marshal(models.Match{
-		ID:             "matches/test" + strconv.Itoa(3),
-		Key:            "test" + strconv.Itoa(3),
-		RatedMatch:     true,
-		PositionAttack: true,
+		ID:         "matches/test" + strconv.Itoa(3),
+		Key:        "test" + strconv.Itoa(3),
+		RatedMatch: true,
 	})
 	if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)

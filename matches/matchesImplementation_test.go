@@ -13,10 +13,9 @@ import (
 func TestCreateMatch(*testing.T) {
 	setup()
 	jsonObject, _ := json.Marshal(models.Match{
-		ID:             "goals/test" + strconv.Itoa(1),
-		Key:            "test" + strconv.Itoa(1),
-		RatedMatch:     true,
-		PositionAttack: true,
+		ID:         "goals/test" + strconv.Itoa(1),
+		Key:        "test" + strconv.Itoa(1),
+		RatedMatch: true,
 	})
 	if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
@@ -27,10 +26,9 @@ func TestCreateMatch(*testing.T) {
 func BenchmarkCreateMatch(b *testing.B) {
 	for c := 0; c < b.N; c++ {
 		jsonObject, _ := json.Marshal(models.Match{
-			ID:             "goals/test" + strconv.Itoa(c),
-			Key:            "test" + strconv.Itoa(c),
-			RatedMatch:     true,
-			PositionAttack: true,
+			ID:         "goals/test" + strconv.Itoa(c),
+			Key:        "test" + strconv.Itoa(c),
+			RatedMatch: true,
 		})
 		if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
