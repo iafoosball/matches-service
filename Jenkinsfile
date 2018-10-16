@@ -42,7 +42,7 @@ pipeline {
             steps {
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
-                sh "docker-compose up --force-recreate"
+                sh "docker-compose up --force-recreate --build"
             }
         }
     }
