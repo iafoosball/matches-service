@@ -13,14 +13,14 @@ pipeline {
         }
         stage ("Build") {
             steps{
+                sh "docker stop matches-service-stag &"
+                sh "docker stop matches-arangodb-stag &"
                 sh "docker-compose build --pull"
 
             }
         }
         stage ("Staging") {
                     steps {
-                        sh "docker stop matches-service-stag &"
-                        sh "docker stop matches-arangodb-stag &"
                         sh "docker-compose up -d"
                         sh "sleep 100s"
                     }
