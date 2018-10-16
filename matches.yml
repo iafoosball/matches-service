@@ -137,16 +137,18 @@ definitions:
         type: boolean
         description: Was the game completed.
       max_goals:
-        type: int
+        type: integer
         description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
       max_time:
-        type: int
+        type: integer
         description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
       blue_user_one_id:
         type: string
         description: This is the user id of the first player playing on the blue side.
       blue_user_one_position:
         type: array
+        items:
+          type: string
         description: The position of the blue user 1. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
       blue_user_two_id:
@@ -154,6 +156,8 @@ definitions:
         description: This is the user id of the second player playing on the blue side. (Not used in single)
       blue_user_two_position:
         type: array
+        items:
+          type: string
         description: The position of the blue user 2. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
       red_user_one_id:
@@ -161,6 +165,8 @@ definitions:
         description: This is the user id of the first player playing on the red side.
       red_user_one_position:
         type: array
+        items:
+          type: string
         description: The position of the red user 1. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
       red_user_two_id:
@@ -168,6 +174,8 @@ definitions:
         description: This is the user id of the second player playing on the red side. (Not used in single)
       red_user_two_position:
         type: array
+        items:
+          type: string
         description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
       rated_match:
