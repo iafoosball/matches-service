@@ -3,7 +3,6 @@ package matches
 import (
 	"github.com/arangodb/go-driver"
 	"github.com/arangodb/go-driver/http"
-	"github.com/iafoosball/matches-service/models"
 	"log"
 	"strconv"
 	"time"
@@ -177,20 +176,20 @@ func initGraph(name string) driver.Graph {
 	return nil
 }
 
-// I think this is really bad practice #sometimesGenericsAreNice
-// Basically interface is only working with matches. I think it can be rewritten taking multiple slices. lets see
-func queryList(query string, matches []*models.Match) []*models.Match {
+// Get an integer from a query.
+func queryInt(query string) int {
 	if cursor, err := db.Query(nil, query, make(map[string]interface{})); err != nil {
 		log.Println(err)
 	} else {
 		defer cursor.Close()
+		var i int
 		for cursor.HasMore() {
-			match := &models.Match{}
-			if _, err = cursor.ReadDocument(nil, match); err != nil {
+			if _, err = cursor.ReadDocument(nil, i); err != nil {
 				log.Println(err)
 			}
-			matches = append(matches, match)
+			return i
 		}
 	}
-	return matches
+	log.Panic("query was not successful")
+	return 0
 }

@@ -33,11 +33,13 @@ func PagedMatches() func(params operations.GetMatchesParams) middleware.Responde
 		if !*params.ASC {
 			order = "DESC"
 		}
-		log.Println("Query Params: \n  Filter: " + *params.Filter + "\n Sort: " + *params.Sort + "\n  Start: " + strconv.FormatInt(*params.Start-1, 10) + "\n  Size: " + strconv.FormatInt(*params.Size-1, 10) + "\n Asc: " + strconv.FormatBool(*params.ASC))
+
+		log.Println("Query Params:   Filter: " + *params.Filter + " Sort: " + *params.Sort + "  Start: " + strconv.FormatInt(*params.Start-1, 10) + "  Size: " + strconv.FormatInt(*params.Size-1, 10) + " Asc: " + strconv.FormatBool(*params.ASC))
 		// Build arangodb query
 		query := "FOR doc IN matches FILTER doc.rated_match == true SORT doc._id " + order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
 		log.Println(query)
-		matches := queryList(query, []*models.Match{})
+		query = "For doc In matches Filter doc.rated_match == true COLLECT WITH COUNT INTO length RETURN length"
+		matches := queryMatches(query, []*models.Match{})
 		page := pagination.PagedMatches{}
 		page.ConstructPage(matches, *params.Start, *params.Size, 100, "")
 
@@ -80,3 +82,20 @@ func playingWithStuffGetAllGoalsFromMatch() {
 //		return operations.NewGetUsersUserIDOK()
 //	}
 //}
+
+// Gets a query as string and a slice and returns that slice with references to the found matches.
+func queryMatches(query string, matches []*models.Match) []*models.Match {
+	if cursor, err := db.Query(nil, query, make(map[string]interface{})); err != nil {
+		log.Println(err)
+	} else {
+		defer cursor.Close()
+		for cursor.HasMore() {
+			match := &models.Match{}
+			if _, err = cursor.ReadDocument(nil, match); err != nil {
+				log.Println(err)
+			}
+			matches = append(matches, match)
+		}
+	}
+	return matches
+}

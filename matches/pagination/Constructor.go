@@ -6,10 +6,7 @@ import (
 	"github.com/iafoosball/matches-service/models"
 )
 
-// I need to learn interfaces...
-type PagedResource interface {
-	construct()
-}
+// This file is only for things directly concerning paged resources.
 
 type PagedMatches struct {
 	Links   Links          `json:"links"`
