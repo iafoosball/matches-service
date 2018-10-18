@@ -29,10 +29,10 @@ func init() {
 	log.SetFlags(log.Ltime | log.Lshortfile)
 	flag.StringVar(&testHost, "testHost", "0.0.0.0", "the test host")
 	flag.StringVar(&testPort, "testPort", "8000", "the port of the matches service where the test should connect")
-	flag.StringVar(&dbHost, "dbHost", "0.0.0.0", "the test host")
-	flag.StringVar(&dbPort, "dbPort", "8001", "the port of the matches service where the test should connect")
-	flag.StringVar(&databaseUser, "dbUser", "root", "the test host")
-	flag.StringVar(&databasePassword, "dbPassword", "matches-password", "the port of the matches service where the test should connect")
+	flag.StringVar(&dbHost, "dbhost", "0.0.0.0", "the test host")
+	flag.StringVar(&dbPort, "dbport", "8001", "the port of the matches service where the test should connect")
+	flag.StringVar(&databaseUser, "dbuser", "root", "the test host")
+	flag.StringVar(&databasePassword, "dbpassword", "matches-password", "the port of the matches service where the test should connect")
 
 	flag.Parse()
 	testUrl = "http://" + testHost + ":" + testPort + "/"

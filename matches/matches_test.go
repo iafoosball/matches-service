@@ -36,7 +36,7 @@ func TestPagedMatches(t *testing.T) {
 	createMatches(amount)
 	defer removeMatches(amount)
 	// Make longer query
-	query := "?filter=matches&ASC=false&size=30"
+	query := "?filter=&ASC=false&size=30"
 	queryUrl := testUrl + "matches" + query
 	log.Println(queryUrl)
 	if resp, err = http.Get(queryUrl); err != nil || http.StatusOK != resp.StatusCode {
@@ -85,6 +85,7 @@ func createMatches(amount int) {
 		_, _ = Collection(matchesColName).CreateDocument(nil, models.Match{
 			Key:        "pagedMatchesTest-" + strconv.Itoa(c),
 			ID:         "matches/pagedMatchesTest-" + strconv.Itoa(c),
+			EndTime:    strconv.Itoa(c),
 			RatedMatch: true},
 		)
 	}

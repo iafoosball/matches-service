@@ -17,6 +17,8 @@ var (
 	goalsCol          driver.Collection
 	matchesCol        driver.Collection
 	goalsToMatchGraph driver.Graph
+	// This is the server address. It should probably not be here, but where else?
+	addr string
 )
 
 const (
@@ -25,6 +27,11 @@ const (
 	matchesColName   = "matches"
 	goalsToMatchName = "goalsToMatch"
 )
+
+//Adds the address for the server
+func Addr(address string) {
+	addr = address
+}
 
 // InitDatabase tries establishes a connection to the db inside a for loop with 10 repetitions.
 // If the db is not available it will sleep the time of the counter (c) in seconds.
@@ -184,7 +191,7 @@ func queryInt(query string) int {
 		defer cursor.Close()
 		var i int
 		for cursor.HasMore() {
-			if _, err = cursor.ReadDocument(nil, i); err != nil {
+			if _, err = cursor.ReadDocument(nil, &i); err != nil {
 				log.Println(err)
 			}
 			return i

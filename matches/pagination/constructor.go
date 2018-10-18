@@ -35,7 +35,8 @@ type Page struct {
 	TotalElements int64 `json:"totalElements,omitempty"`
 }
 
-func (p *PagedMatches) ConstructPage(match []*models.Match, start int64, size int64, totalElements int64, url string) *PagedMatches {
+func (p *PagedMatches) ConstructPage(match []*models.Match, addr string, filter string, sort string, order string, start int64, size int64, totalElements int64) *PagedMatches {
+	api := "matches"
 	p.Page.Start = start
 	p.Page.Size = size
 	p.Page.TotalElements = totalElements
@@ -46,6 +47,7 @@ func (p *PagedMatches) ConstructPage(match []*models.Match, start int64, size in
 		m = append(m, *v)
 	}
 	p.Content = m
+	p.Links = links(&p.Links, addr, api, filter, sort, order, start, size, totalElements)
 	return p
 }
 

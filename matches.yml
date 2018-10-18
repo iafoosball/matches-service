@@ -44,7 +44,7 @@ paths:
           description: "Successful created goal"
   /matches/:
     get:
-      summary: "Get a page of Recipients."
+      summary: "Get a page of Recipients. Sort and Order can not be empty strings, don't define them if you don't need them."
       parameters:
       - in: "query"
         name: "filter"
@@ -56,7 +56,7 @@ paths:
         name: "sort"
         description: "The default is new matches at the top."
         type: "string"
-        default: ""
+        default: "end_time"
       - in: "query"
         name: "start"
         description: "The starting item of the list."
@@ -64,10 +64,10 @@ paths:
         minimum: 1
         default: 1
       - in: "query"
-        name: "ASC"
-        description: "Sort ascending or descending. Ascending is true and the default value."
-        type: "boolean"
-        default: true
+        name: "order"
+        description: "Order ascending or descending, either ASC or DESC. DESC the default value in order to return latest matches first."
+        type: "string"
+        default: "DESC"
       - in: "query"
         name: "size"
         description: "The number of items to be returned. Defaults to 5, max is 10000."

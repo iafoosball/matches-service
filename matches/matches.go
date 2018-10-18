@@ -8,6 +8,7 @@ import (
 	"github.com/iafoosball/matches-service/restapi/operations"
 	"log"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -26,22 +27,24 @@ func CreateMatch() func(params operations.PostMatchesParams) middleware.Responde
 	}
 }
 
-// Still needs implementation of filtering, sorting, tests.
+// Still needs implementation of tests and links.
 func PagedMatches() func(params operations.GetMatchesParams) middleware.Responder {
 	return func(params operations.GetMatchesParams) middleware.Responder {
-		var order = "ASC"
-		if !*params.ASC {
-			order = "DESC"
-		}
-
-		log.Println("Query Params:   Filter: " + *params.Filter + " Sort: " + *params.Sort + "  Start: " + strconv.FormatInt(*params.Start-1, 10) + "  Size: " + strconv.FormatInt(*params.Size-1, 10) + " Asc: " + strconv.FormatBool(*params.ASC))
 		// Build arangodb query
-		query := "FOR doc IN matches FILTER doc.rated_match == true SORT doc._id " + order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
-		log.Println(query)
-		query = "For doc In matches Filter doc.rated_match == true COLLECT WITH COUNT INTO length RETURN length"
+		sort := *params.Sort
+		sort = "Sort doc." + strings.Replace(sort, ",", ", doc.", -1)
+		log.Println(sort)
+		filter := *params.Filter
+		if filter != "" {
+			filter = "Filter doc." + strings.Replace(filter, ",", ", doc.", -1)
+		}
+		query := "FOR doc IN matches " + filter + " " + sort + " " + *params.Order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
 		matches := queryMatches(query, []*models.Match{})
+		query = "For doc In matches " + filter + " COLLECT WITH COUNT INTO length RETURN length"
+		total := int64(queryInt(query))
+
 		page := pagination.PagedMatches{}
-		page.ConstructPage(matches, *params.Start, *params.Size, 100, "")
+		page.ConstructPage(matches, addr, *params.Filter, *params.Sort, *params.Order, *params.Start, *params.Size, total)
 
 		return operations.NewGetMatchesOK().WithPayload(page)
 	}
