@@ -4,7 +4,7 @@
 swagger: "2.0"
 info:
   description: "The matches service of IAFoosball"
-  version: "2.0.x"
+  version: "2.0.x Beta"
   title: "Matches-Service"
   termsOfService: "http://iafoosball.aau.dk/terms/"
   contact:
@@ -42,7 +42,46 @@ paths:
       responses:
         200:
           description: "Successful created goal"
-  /matches:
+  /matches/:
+    get:
+      summary: "Get a page of Recipients."
+      parameters:
+      - in: "query"
+        name: "filter"
+        description: "Not Implemented!!! Filter parameters for the matches.
+        Hopefully looks something like goals_red>10"
+        type: "string"
+        default: ""
+      - in: "query"
+        name: "sort"
+        description: "The default is new matches at the top."
+        type: "string"
+        default: ""
+      - in: "query"
+        name: "start"
+        description: "The starting item of the list."
+        type: "integer"
+        minimum: 1
+        default: 1
+      - in: "query"
+        name: "ASC"
+        description: "Sort ascending or descending. Ascending is true and the default value."
+        type: "boolean"
+        default: true
+      - in: "query"
+        name: "size"
+        description: "The number of items to be returned. Defaults to 5, max is 10000."
+        type: "integer"
+        maximum: 10000
+        minimum: 1
+        default: 5
+      responses:
+        200:
+          description: "Successful."
+          schema:
+            type: object
+            description: "A json object"
+
     post:
       summary: "Create a new match"
       consumes:
@@ -57,30 +96,20 @@ paths:
       responses:
         200:
           description: "Successful."
-  /matches/{match_id}:
-    get:
-      summary: "Returns the match data for the specified match id."
-      parameters:
-        - in: "path"
-          name: "match_id"
-          description: "The match id."
-          type: string
-          required: true
-      responses:
-        200:
-          description: "Successful."
-  /matches/users/{user_id}:
-    get:
-      summary: "Returns all the matches for a user id."
-      parameters:
-        - in: "path"
-          name: "user_id"
-          description: "The user id."
-          type: string
-          required: true
-      responses:
-        200:
-          description: "Successful."
+
+#  /matches/{match_id}:
+#    get:
+#      summary: "Returns the match data for the specified match id."
+#      parameters:
+#        - in: "path"
+#          name: "match_id"
+#          description: "The match id."
+#          type: string
+#          required: true
+#      responses:
+#        200:
+#          description: "Successful."
+
 
 definitions:
   Goal:
@@ -119,6 +148,7 @@ definitions:
   Match:
     type: object
     properties:
+#      Match properties
       _id:
         type: string
         description: The match id which is the collection + "/" + the key
@@ -136,51 +166,72 @@ definitions:
       completed:
         type: boolean
         description: Was the game completed.
+      winner:
+        type: string
+        description: Can be either "red" or "blue"
       max_goals:
         type: integer
         description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
+        default: 10
       max_time:
         type: integer
         description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
-      blue_user_one_id:
+      rated_match:
+        type: boolean
+        description: A match can be rated, ie a ranked game with points, or without.
+      switch_position:
+        type: boolean
+        description: Switch the position after 50% of the goal (time or goals) is reached.
+
+#      Players properties
+      blue_one_id:
         type: string
         description: This is the user id of the first player playing on the blue side.
-      blue_user_one_position:
+      blue_one_position:
         type: array
         items:
           type: string
         description: The position of the blue user 1. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
-      blue_user_two_id:
+      blue_two_id:
         type: string
         description: This is the user id of the second player playing on the blue side. (Not used in single)
-      blue_user_two_position:
+      blue_two_position:
         type: array
         items:
           type: string
         description: The position of the blue user 2. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
-      red_user_one_id:
+      red_one_id:
         type: string
         description: This is the user id of the first player playing on the red side.
-      red_user_one_position:
+      red_one_position:
         type: array
         items:
           type: string
         description: The position of the red user 1. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
-      red_user_two_id:
+      red_two_id:
         type: string
         description: This is the user id of the second player playing on the red side. (Not used in single)
-      red_user_two_position:
+      red_two_position:
         type: array
         items:
           type: string
         description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
-      rated_match:
-        type: boolean
-        description: A match can be rated, ie a ranked game with points, or without.
+
+#      goals properties
+      goals_blue:
+        type: array
+        items:
+          type: number
+        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added. This could change in the future to maps, if we decide to save the scoring player as well
+      goals_red:
+        type: array
+        items:
+          type: number
+        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added.
 
 
 

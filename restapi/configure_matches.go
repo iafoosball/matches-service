@@ -56,6 +56,7 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 
 	//[Start: Matches end points]
 	api.PostMatchesHandler = operations.PostMatchesHandlerFunc(matches.CreateMatch())
+	api.GetMatchesHandler = operations.GetMatchesHandlerFunc(matches.PagedMatches())
 	//[End: Matches end points]
 
 	api.ServerShutdown = func() {}

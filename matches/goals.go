@@ -27,7 +27,7 @@ func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
 //	return func(params operations.PatchFriendsUserIDFriendIDParams) middleware.Responder {
 //		query := "Update {_key: \"" + params.UserID + params.FriendID + "\"} WITH { accepted: true, datetime_accepted: \"" +
 //			time.Now().Format(time.RFC3339) + "\" } IN friends "
-//		if _, err := database.Query(nil, query, nil); err != nil {
+//		if _, err := db.Query(nil, query, nil); err != nil {
 //			panic(err)
 //		}
 //		return operations.NewPatchFriendsUserIDFriendIDOK()
@@ -51,7 +51,7 @@ func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
 //	return func(params operations.GetFriendsUserIDParams) middleware.Responder {
 //		query := "FOR users, edge, edgesArray IN 1 ANY 'users/" + params.UserID + "' GRAPH 'friends' FILTER edgesArray.edges[*].accepted ALL == true Return {users}"
 //		var friends []*models.User
-//		if cursor, err := database.Query(nil, query, nil); err != nil {
+//		if cursor, err := db.Query(nil, query, nil); err != nil {
 //			panic(err)
 //		} else {
 //			for cursor.HasMore() {
