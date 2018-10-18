@@ -3,13 +3,19 @@ package matches
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/iafoosball/matches-service/matches/utils"
+	"github.com/iafoosball/matches-service/matches/pagination"
 	"github.com/iafoosball/matches-service/models"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"testing"
-	"time"
+)
+
+var (
+	resp *http.Response
+	body []byte
 )
 
 func TestCreateMatch(*testing.T) {
@@ -26,34 +32,32 @@ func TestCreateMatch(*testing.T) {
 }
 
 func TestPagedMatches(t *testing.T) {
-	for c := 0; c < 100; c++ {
-		_, _ = Collection(matchesColName).CreateDocument(nil, models.Match{
-			Key:        "pagedMatchesTest-" + strconv.Itoa(c),
-			ID:         "matches/pagedMatchesTest-" + strconv.Itoa(c),
-			RatedMatch: true},
-		)
-	}
-	defer func() {
-		time.Sleep(1 * time.Second)
-		for c := 0; c < 100; c++ {
-			if _, err := Collection(matchesColName).RemoveDocument(nil, "pagedMatchesTest-"+strconv.Itoa(c)); err != nil {
-				log.Println(err)
-			}
-		}
-	}()
+	amount := 30
+	createMatches(amount)
+	defer removeMatches(amount)
 	// Make longer query
-	query := "?filter=matches"
+	query := "?filter=matches&ASC=false&size=30"
 	queryUrl := testUrl + "matches" + query
 	log.Println(queryUrl)
-	if resp, err := http.Get(queryUrl); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err = http.Get(queryUrl); err != nil || http.StatusOK != resp.StatusCode {
 		log.Fatal(err)
-	} else {
-		// Body should be a paged content
-		pagedMatches := utils.PagedMatch{}
-		json.NewDecoder(resp.Body).Decode(&pagedMatches)
-		log.Printf("%+v\n", pagedMatches)
-
 	}
+	//Always close body to avoid memory leak
+	defer resp.Body.Close()
+	if body, err = ioutil.ReadAll(resp.Body); err != nil {
+		log.Fatal(err)
+	}
+	var pagedMatches pagination.PagedMatches
+	err = json.NewDecoder(strings.NewReader(string(body))).Decode(&pagedMatches)
+	if err != nil {
+		log.Fatal(err)
+	}
+	content := pagedMatches.Content
+	if len(content) != amount {
+		log.Println(len(content))
+		log.Fatal("not correct number of items")
+	}
+	log.Printf("%+v\n", pagedMatches)
 
 }
 
@@ -74,4 +78,22 @@ func BenchmarkCreateMatch(b *testing.B) {
 func TestDeleteMatch(*testing.T) {
 	//_, s := CreateMatch(models.Match{})
 
+}
+
+func createMatches(amount int) {
+	for c := 0; c < amount; c++ {
+		_, _ = Collection(matchesColName).CreateDocument(nil, models.Match{
+			Key:        "pagedMatchesTest-" + strconv.Itoa(c),
+			ID:         "matches/pagedMatchesTest-" + strconv.Itoa(c),
+			RatedMatch: true},
+		)
+	}
+}
+
+func removeMatches(amount int) {
+	for c := 0; c < amount; c++ {
+		if _, err := Collection(matchesColName).RemoveDocument(nil, "pagedMatchesTest-"+strconv.Itoa(c)); err != nil {
+			log.Println(err)
+		}
+	}
 }

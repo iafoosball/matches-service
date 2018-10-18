@@ -3,7 +3,7 @@ package matches
 import (
 	"encoding/json"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/iafoosball/matches-service/matches/utils"
+	"github.com/iafoosball/matches-service/matches/pagination"
 	"github.com/iafoosball/matches-service/models"
 	"github.com/iafoosball/matches-service/restapi/operations"
 	"log"
@@ -33,19 +33,15 @@ func PagedMatches() func(params operations.GetMatchesParams) middleware.Responde
 		if !*params.ASC {
 			order = "DESC"
 		}
+		log.Println("Query Params: \n  Filter: " + *params.Filter + "\n Sort: " + *params.Sort + "\n  Start: " + strconv.FormatInt(*params.Start-1, 10) + "\n  Size: " + strconv.FormatInt(*params.Size-1, 10) + "\n Asc: " + strconv.FormatBool(*params.ASC))
 		// Build arangodb query
-		query := "FOR doc IN matches FILTER doc.rated_match == true SORT doc._id " + order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + "RETURN doc"
-		matches := queryList(query, &[]models.Match{})
-		//log.Printf("%+v\n", matches)
-		page, _ := json.Marshal(utils.ConstructPage(matches, *params.Start, *params.Size, 100, ""))
-		//log.Printf("%+v\n", page)
+		query := "FOR doc IN matches FILTER doc.rated_match == true SORT doc._id " + order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
+		log.Println(query)
+		matches := queryList(query, []*models.Match{})
+		page := pagination.PagedMatches{}
+		page.ConstructPage(matches, *params.Start, *params.Size, 100, "")
 
-		//var pagedMatches utils.PagedMatch
-		//json.Unmarshal(page, &pagedMatches)
-		//log.Printf("%+v\n", pagedMatches)
-
-		// So on the test side content is an empty array, which should definitely not happen. Thats why there is all the logging stuff. Please leave until pagination is fixed.
-		return operations.NewGetMatchesOK().WithPayload(string(page))
+		return operations.NewGetMatchesOK().WithPayload(page)
 	}
 }
 

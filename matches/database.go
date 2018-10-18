@@ -179,19 +179,17 @@ func initGraph(name string) driver.Graph {
 
 // I think this is really bad practice #sometimesGenericsAreNice
 // Basically interface is only working with matches. I think it can be rewritten taking multiple slices. lets see
-func queryList(query string, matches *[]models.Match) *[]models.Match {
+func queryList(query string, matches []*models.Match) []*models.Match {
 	if cursor, err := db.Query(nil, query, make(map[string]interface{})); err != nil {
 		log.Println(err)
 	} else {
 		defer cursor.Close()
-
 		for cursor.HasMore() {
 			match := &models.Match{}
 			if _, err = cursor.ReadDocument(nil, match); err != nil {
 				log.Println(err)
 			}
-			*matches = append(*matches, *match)
-			log.Printf("%+v\n", matches)
+			matches = append(matches, match)
 		}
 	}
 	return matches
