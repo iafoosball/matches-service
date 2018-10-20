@@ -7,7 +7,8 @@ import (
 	"log"
 )
 
-// CreateGoal has test
+// CreateGoal from input
+// Has test
 func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
 	return func(params operations.PostGoalsParams) middleware.Responder {
 		if _, err := col(goalsColName).CreateDocument(nil, &params.Body); err != nil {

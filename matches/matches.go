@@ -15,7 +15,8 @@ var (
 	err error
 )
 
-// CreateMatch has test
+// CreateMatch creates a match from the input
+// Has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
 		if _, err := col(matchesColName).CreateDocument(nil, &params.Body); err != nil {
@@ -27,7 +28,8 @@ func CreateMatch() func(params operations.PostMatchesParams) middleware.Responde
 	}
 }
 
-// PagedMatches has test (maybe rework)
+// PagedMatches returns a page with matches as content
+// has test (maybe rework)
 func PagedMatches() func(params operations.GetMatchesParams) middleware.Responder {
 	return func(params operations.GetMatchesParams) middleware.Responder {
 		sort := *params.Sort
