@@ -32,7 +32,7 @@ paths:
           description: "Successful created goal"
   /goals/{goal_id}:
     get:
-      summary: Get a single goal.
+      summary: Should this be allowed???? Get a single goal.
       parameters:
       - in: "path"
         name: "goal_id"
@@ -79,8 +79,7 @@ paths:
         200:
           description: "Successful."
           schema:
-            type: object
-            description: "A json object"
+            $ref: "#/definitions/PagedMatches"
 
     post:
       summary: "Create a new match"
@@ -182,7 +181,6 @@ definitions:
       switch_position:
         type: boolean
         description: Switch the position after 50% of the goal (time or goals) is reached.
-
 #      Players properties
       blue_one_id:
         type: string
@@ -220,7 +218,6 @@ definitions:
           type: string
         description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
         example: [12341234/attack,12341245/defense]
-
 #      goals properties
       goals_blue:
         type: array
@@ -232,6 +229,60 @@ definitions:
         items:
           type: number
         description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added.
+
+  PagedMatches:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Match'
+      page:
+        type: object
+        $ref: '#/definitions/Page'
+  Links:
+    type: array
+    items:
+      type: object
+      properties:
+        first:
+          type: string
+          description: "The link to the first page"
+        previous:
+          type: string
+          description: "The link to the previous page."
+        self:
+          type: string
+          description: "THe link to the current page.."
+        next:
+          type: string
+          description: "The link to the next page."
+        last:
+          type: string
+          description: "The linkto the last page."
+  Page:
+    type: object
+    properties:
+      start:
+        type: integer
+        description: 'The first item in the page out of the document'
+      size:
+        type: integer
+        description: 'the size of a page'
+      total_items:
+        type: integer
+        description: 'the number of items in the document'
+      current_page:
+        type: integer
+        description: 'The current page number inside the document'
+      total_pages:
+        type: integer
+        description: 'The number of total pages inside the document'
+
+
+
 
 
 

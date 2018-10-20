@@ -7,10 +7,10 @@ import (
 	"log"
 )
 
-// Has test
+// CreateGoal has test
 func CreateGoal() func(params operations.PostGoalsParams) middleware.Responder {
 	return func(params operations.PostGoalsParams) middleware.Responder {
-		if _, err := Collection(goalsColName).CreateDocument(nil, &params.Body); err != nil {
+		if _, err := col(goalsColName).CreateDocument(nil, &params.Body); err != nil {
 			request, _ := json.Marshal(params.Body)
 			log.Println(string(request))
 			log.Println(err)

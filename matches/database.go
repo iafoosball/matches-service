@@ -18,7 +18,9 @@ var (
 	matchesCol        driver.Collection
 	goalsToMatchGraph driver.Graph
 	// This is the server address. It should probably not be here, but where else?
-	addr string
+	addr   string
+	er     error
+	exists bool
 )
 
 const (
@@ -28,7 +30,7 @@ const (
 	goalsToMatchName = "goalsToMatch"
 )
 
-//Adds the address for the server
+//Addr to set address of the server
 func Addr(address string) {
 	addr = address
 }
@@ -74,16 +76,16 @@ func dbDriver(user string, password string) {
 					return
 				}
 				log.Println("Connected to db: " + dbName)
-				Collection(goalsColName)
-				Collection(matchesColName)
-				Graph(goalsToMatchName)
+				col(goalsColName)
+				col(matchesColName)
+				graph(goalsToMatchName)
 			} else if e != nil {
 				log.Println(e)
 			} else {
 				db, err = client.Database(nil, dbName)
-				Collection(goalsColName)
-				Collection(matchesColName)
-				Graph(goalsToMatchName)
+				col(goalsColName)
+				col(matchesColName)
+				graph(goalsToMatchName)
 			}
 			if err != nil {
 				log.Println(err)
@@ -96,8 +98,8 @@ func dbDriver(user string, password string) {
 	}
 }
 
-// Open a certain collection. If the collection does not exist, initialize it first.
-func Collection(name string) driver.Collection {
+// Open a collection. If the collection does not exist, initialize it first.
+func col(name string) driver.Collection {
 	if db == nil {
 		InitDatabase(host, port, dbUser, dbPassword)
 	} else {
@@ -119,28 +121,27 @@ func Collection(name string) driver.Collection {
 
 // Initializes a collections
 func initCollection(name string, colType int) driver.Collection {
-	if exists, err := db.CollectionExists(nil, name); !exists {
-		if col, e := db.CreateCollection(nil, name, &driver.CreateCollectionOptions{
+	var col driver.Collection
+	var exists bool
+	if exists, er = db.CollectionExists(nil, name); !exists && er == nil {
+		if col, er = db.CreateCollection(nil, name, &driver.CreateCollectionOptions{
 			Type: driver.CollectionType(colType),
-		}); e != nil {
+		}); er != nil {
 			return col
-		} else if err != nil {
-			log.Println(err)
 		}
-	} else if err != nil {
-		log.Println(err)
-	} else {
+	} else if exists && er == nil {
 
-		if col, err := db.Collection(nil, name); err == nil {
+		if col, er = db.Collection(nil, name); er == nil {
 			return col
-		} else {
-			log.Println(err)
 		}
+	}
+	if er != nil {
+		log.Println(er)
 	}
 	return nil
 }
 
-func Graph(name string) driver.Graph {
+func graph(name string) driver.Graph {
 	if db == nil {
 		InitDatabase(host, port, dbUser, dbPassword)
 	} else {
@@ -154,31 +155,28 @@ func Graph(name string) driver.Graph {
 	return nil
 }
 
-// initGraph is explicitly designed to create a Graph with matches as vertices and goals as edges.
+// initGraph is explicitly designed to create a graph with matches as vertices and goals as edges.
 // As we only have one graph for now, I don't think it is necessary to make this func more general,
 // but it easy to do so in the future if necessary.
 func initGraph(name string) driver.Graph {
-	if exists, err := db.GraphExists(nil, name); !exists {
-		if col, e := db.CreateGraph(nil, name, &driver.CreateGraphOptions{
+	var graph driver.Graph
+	if exists, er = db.GraphExists(nil, name); !exists && er == nil {
+		if graph, er = db.CreateGraph(nil, name, &driver.CreateGraphOptions{
 			EdgeDefinitions: []driver.EdgeDefinition{{
 				Collection: goalsColName,
 				To:         []string{matchesColName},
 				From:       []string{matchesColName},
 			}},
-		}); e != nil {
-			return col
-		} else if err != nil {
-			log.Println(err)
+		}); er != nil {
+			return graph
 		}
-	} else if err != nil {
-		log.Println(err)
-	} else {
-
-		if col, err := db.Graph(nil, name); err == nil {
-			return col
-		} else {
-			log.Println(err)
+	} else if er == nil {
+		if graph, er = db.Graph(nil, name); er == nil {
+			return graph
 		}
+	}
+	if er != nil {
+		log.Println(er)
 	}
 	return nil
 }

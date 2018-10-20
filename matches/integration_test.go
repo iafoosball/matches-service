@@ -22,7 +22,7 @@ var (
 	dbPort           string
 	databaseUser     string
 	databasePassword string
-	testUrl          string
+	testURL          string
 )
 
 func init() {
@@ -35,7 +35,7 @@ func init() {
 	flag.StringVar(&databasePassword, "dbpassword", "matches-password", "the port of the matches service where the test should connect")
 
 	flag.Parse()
-	testUrl = "http://" + testHost + ":" + testPort + "/"
+	testURL = "http://" + testHost + ":" + testPort + "/"
 	if i, err := strconv.Atoi(dbPort); err != nil {
 		log.Println(err)
 	} else {
@@ -55,7 +55,7 @@ func TestGraph(*testing.T) {
 		Key:        "test" + strconv.Itoa(3),
 		RatedMatch: true,
 	})
-	if resp, err := http.Post(testUrl+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(testURL+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
@@ -67,7 +67,7 @@ func TestGraph(*testing.T) {
 			From: "matches/test3",
 			To:   "matches/test3",
 		})
-		if resp, err := http.Post(testUrl+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
+		if resp, err := http.Post(testURL+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
 			log.Fatal(err)
 		}

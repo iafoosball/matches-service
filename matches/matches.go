@@ -3,7 +3,7 @@ package matches
 import (
 	"encoding/json"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/iafoosball/matches-service/matches/pagination"
+	"github.com/iafoosball/matches-service/matches/paged"
 	"github.com/iafoosball/matches-service/models"
 	"github.com/iafoosball/matches-service/restapi/operations"
 	"log"
@@ -15,10 +15,10 @@ var (
 	err error
 )
 
-// Has test
+// CreateMatch has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
-		if _, err := Collection(matchesColName).CreateDocument(nil, &params.Body); err != nil {
+		if _, err := col(matchesColName).CreateDocument(nil, &params.Body); err != nil {
 			request, _ := json.Marshal(params.Body)
 			log.Println(string(request))
 			log.Println(err)
@@ -27,32 +27,30 @@ func CreateMatch() func(params operations.PostMatchesParams) middleware.Responde
 	}
 }
 
-// Still needs implementation of tests and links.
+// PagedMatches has test (maybe rework)
 func PagedMatches() func(params operations.GetMatchesParams) middleware.Responder {
 	return func(params operations.GetMatchesParams) middleware.Responder {
-		// Build arangodb query
 		sort := *params.Sort
 		sort = "Sort doc." + strings.Replace(sort, ",", ", doc.", -1)
-		log.Println(sort)
 		filter := *params.Filter
 		if filter != "" {
 			filter = "Filter doc." + strings.Replace(filter, ",", ", doc.", -1)
 		}
+		// is this possible in one query, getting number of total items and the selected items?
 		query := "FOR doc IN matches " + filter + " " + sort + " " + *params.Order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
-		matches := queryMatches(query, []*models.Match{})
+		matches := queryMatches(query)
 		query = "For doc In matches " + filter + " COLLECT WITH COUNT INTO length RETURN length"
 		total := int64(queryInt(query))
 
-		page := pagination.PagedMatches{}
-		page.ConstructPage(matches, addr, *params.Filter, *params.Sort, *params.Order, *params.Start, *params.Size, total)
-
-		return operations.NewGetMatchesOK().WithPayload(page)
+		url := addr + "/matches/?filter=" + *params.Filter + "&sort=" + *params.Sort + "&order=" + *params.Order
+		a := paged.Matches(matches, url, *params.Start, *params.Size, total)
+		return operations.NewGetMatchesOK().WithPayload(a)
 	}
 }
 
-// TODO: implement + test
-func DeleteMatch(matchId string) *operations.PostMatchesOK {
-	matchesCol.RemoveDocument(nil, matchId)
+// DeleteMatch needs implement + test
+func DeleteMatch(matchID string) *operations.PostMatchesOK {
+	matchesCol.RemoveDocument(nil, matchID)
 	return operations.NewPostMatchesOK()
 }
 
@@ -87,7 +85,8 @@ func playingWithStuffGetAllGoalsFromMatch() {
 //}
 
 // Gets a query as string and a slice and returns that slice with references to the found matches.
-func queryMatches(query string, matches []*models.Match) []*models.Match {
+func queryMatches(query string) []*models.Match {
+	matches := []*models.Match{}
 	if cursor, err := db.Query(nil, query, make(map[string]interface{})); err != nil {
 		log.Println(err)
 	} else {
