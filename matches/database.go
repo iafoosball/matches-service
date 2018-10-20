@@ -32,7 +32,7 @@ const (
 
 //Addr to set address of the server
 func Addr(address string) {
-	addr = address
+	addr = "http://" + address
 }
 
 // InitDatabase tries establishes a connection to the db inside a for loop with 10 repetitions.

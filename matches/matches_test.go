@@ -31,31 +31,47 @@ func TestCreateMatch(*testing.T) {
 }
 
 func TestPagedMatches(t *testing.T) {
-	amount := 30
-	createMatches(amount)
-	defer removeMatches(amount)
-	query := "?filter=&ASC=false&size=30"
-	queryURL := testURL + "matches" + query
-	log.Println(queryURL)
-	if resp, err = http.Get(queryURL); err != nil || http.StatusOK != resp.StatusCode {
-		log.Fatal(err)
+	totalMatches := 1000
+	size := 10
+	start := 981
+	createMatches(totalMatches)
+	var pagedMatches models.PagedMatches
+	defer removeMatches(totalMatches)
+	query := testURL + "matches/?filter=&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
+	for query != "" {
+		log.Println(query)
+		if resp, err = http.Get(query); err != nil || http.StatusOK != resp.StatusCode {
+			log.Fatal(err)
+		}
+		if body, err = ioutil.ReadAll(resp.Body); err != nil {
+			log.Fatal(err)
+		}
+		err = json.NewDecoder(strings.NewReader(string(body))).Decode(&pagedMatches)
+		for _, m := range pagedMatches.Links {
+			if m.Rel == "Next" && m.Href != "" {
+				query = m.Href
+				log.Println(query)
+				m.Href = ""
+				break
+			} else {
+				query = ""
+			}
+			log.Printf("%+v\n", m)
+		}
+		start += size
 	}
 	//Always close body to avoid memory leak
 	defer resp.Body.Close()
-	if body, err = ioutil.ReadAll(resp.Body); err != nil {
-		log.Fatal(err)
-	}
-	var pagedMatches models.PagedMatches
-	err = json.NewDecoder(strings.NewReader(string(body))).Decode(&pagedMatches)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	content := pagedMatches.Content
-	if len(content) != amount {
+	if len(content) != size {
 		log.Println(len(content))
 		log.Fatal("not correct number of items")
 	}
-	for _, m := range pagedMatches.Content {
+	for _, m := range pagedMatches.Links {
 		log.Printf("%+v\n", m)
 	}
 

@@ -247,21 +247,12 @@ definitions:
     items:
       type: object
       properties:
-        first:
+        rel:
           type: string
           description: "The link to the first page"
-        previous:
+        href:
           type: string
           description: "The link to the previous page."
-        self:
-          type: string
-          description: "THe link to the current page.."
-        next:
-          type: string
-          description: "The link to the next page."
-        last:
-          type: string
-          description: "The linkto the last page."
   Page:
     type: object
     properties:
