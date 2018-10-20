@@ -55,45 +55,45 @@ func InitDatabase(dbHost string, dbPort int, dbUser string, dbPassword string) {
 	}
 }
 
-// Authenticate with the arangodb and get the db
+// Authenticate with the arangodb and get the db resource
 func dbDriver(user string, password string) {
-	if conn, err := http.NewConnection(http.ConnectionConfig{
+	conn, err := http.NewConnection(http.ConnectionConfig{
 		Endpoints: []string{"http://" + host + ":" + strconv.Itoa(port)},
-	}); err == nil {
-		if client, err := driver.NewClient(driver.ClientConfig{
-			Connection:     conn,
-			Authentication: driver.BasicAuthentication(user, password),
-		}); err == nil {
-			if dbExists, e := client.DatabaseExists(nil, dbName); !dbExists && e == nil {
-				if db, err = client.CreateDatabase(nil, dbName, &driver.CreateDatabaseOptions{
-					[]driver.CreateDatabaseUserOptions{
-						{
-							UserName: user,
-						},
-					},
-				}); err != nil {
-					log.Fatal(err)
-					return
-				}
-				log.Println("Connected to db: " + dbName)
-				col(goalsColName)
-				col(matchesColName)
-				graph(goalsToMatchName)
-			} else if e != nil {
-				log.Println(e)
-			} else {
-				db, err = client.Database(nil, dbName)
-				col(goalsColName)
-				col(matchesColName)
-				graph(goalsToMatchName)
-			}
-			if err != nil {
-				log.Println(err)
-			}
-		} else {
-			log.Println(err)
+	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	client, err := driver.NewClient(driver.ClientConfig{
+		Connection:     conn,
+		Authentication: driver.BasicAuthentication(user, password),
+	})
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	if dbExists, e := client.DatabaseExists(nil, dbName); !dbExists && e == nil {
+		if db, err = client.CreateDatabase(nil, dbName, &driver.CreateDatabaseOptions{
+			[]driver.CreateDatabaseUserOptions{
+				{
+					UserName: user,
+				},
+			},
+		}); err != nil {
+			log.Fatal(err)
+			return
 		}
-	} else {
+		log.Println("Connected to db: " + dbName)
+		col(goalsColName)
+		col(matchesColName)
+		graph(goalsToMatchName)
+	} else if e == nil {
+		db, err = client.Database(nil, dbName)
+		col(goalsColName)
+		col(matchesColName)
+		graph(goalsToMatchName)
+	}
+	if err != nil {
 		log.Println(err)
 	}
 }
@@ -123,20 +123,20 @@ func col(name string) driver.Collection {
 func initCollection(name string, colType int) driver.Collection {
 	var col driver.Collection
 	var exists bool
-	if exists, er = db.CollectionExists(nil, name); !exists && er == nil {
-		if col, er = db.CreateCollection(nil, name, &driver.CreateCollectionOptions{
+	if exists, err = db.CollectionExists(nil, name); !exists && err == nil {
+		if col, err = db.CreateCollection(nil, name, &driver.CreateCollectionOptions{
 			Type: driver.CollectionType(colType),
-		}); er != nil {
+		}); err != nil {
 			return col
 		}
-	} else if exists && er == nil {
+	} else if exists && err == nil {
 
-		if col, er = db.Collection(nil, name); er == nil {
+		if col, err = db.Collection(nil, name); err == nil {
 			return col
 		}
 	}
-	if er != nil {
-		log.Println(er)
+	if err != nil {
+		log.Println(err)
 	}
 	return nil
 }

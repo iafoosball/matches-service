@@ -18,7 +18,6 @@ var (
 )
 
 func TestCreateMatch(*testing.T) {
-	setup()
 	jsonObject, _ := json.Marshal(models.Match{
 		ID:         "matches/test" + strconv.Itoa(1),
 		Key:        "test" + strconv.Itoa(1),
@@ -36,7 +35,6 @@ func TestPagedMatches(t *testing.T) {
 	start := 981
 	createMatches(totalMatches)
 	var pagedMatches models.PagedMatches
-	defer removeMatches(totalMatches)
 	query := testURL + "matches/?filter=&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
 	for query != "" {
 		log.Println(query)
@@ -50,19 +48,14 @@ func TestPagedMatches(t *testing.T) {
 		for _, m := range pagedMatches.Links {
 			if m.Rel == "Next" && m.Href != "" {
 				query = m.Href
-				log.Println(query)
 				m.Href = ""
 				break
 			} else {
 				query = ""
 			}
-			log.Printf("%+v\n", m)
 		}
 		start += size
 	}
-	//Always close body to avoid memory leak
-	defer resp.Body.Close()
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,9 +63,6 @@ func TestPagedMatches(t *testing.T) {
 	if len(content) != size {
 		log.Println(len(content))
 		log.Fatal("not correct number of items")
-	}
-	for _, m := range pagedMatches.Links {
-		log.Printf("%+v\n", m)
 	}
 
 }
@@ -99,18 +89,10 @@ func TestDeleteMatch(*testing.T) {
 func createMatches(amount int) {
 	for c := 0; c < amount; c++ {
 		_, _ = col(matchesColName).CreateDocument(nil, models.Match{
-			Key:        "pagedMatchesTest-" + strconv.Itoa(c),
-			ID:         "matches/pagedMatchesTest-" + strconv.Itoa(c),
+			Key:        "test-" + strconv.Itoa(c),
+			ID:         "matches/test-" + strconv.Itoa(c),
 			EndTime:    strconv.Itoa(c),
 			RatedMatch: true},
 		)
-	}
-}
-
-func removeMatches(amount int) {
-	for c := 0; c < amount; c++ {
-		if _, err := col(matchesColName).RemoveDocument(nil, "pagedMatchesTest-"+strconv.Itoa(c)); err != nil {
-			log.Println(err)
-		}
 	}
 }

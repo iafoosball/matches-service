@@ -2,7 +2,6 @@ package paged
 
 import (
 	"github.com/iafoosball/matches-service/models"
-	"log"
 	"strconv"
 )
 
@@ -28,23 +27,23 @@ func page(start int64, size int64, totalElements int64) *models.Page {
 func links(addr string, start int64, size int64, totalItems int64) models.Links {
 	return models.Links{
 		&models.LinksItems0{
-			Rel: "first",
+			Rel:  "first",
 			Href: buildLink(addr, 1, size),
 		},
 		&models.LinksItems0{
-			Rel: "previous",
+			Rel:  "previous",
 			Href: previous(addr, start, size),
 		},
 		&models.LinksItems0{
-			Rel: "self",
+			Rel:  "self",
 			Href: buildLink(addr, start, size),
 		},
 		&models.LinksItems0{
-			Rel: "next",
+			Rel:  "next",
 			Href: next(addr, start, size, totalItems),
 		},
 		&models.LinksItems0{
-			Rel: "last",
+			Rel:  "last",
 			Href: last(addr, start, size, totalItems),
 		},
 	}
@@ -60,8 +59,6 @@ func previous(url string, start int64, size int64) string {
 
 func next(addr string, start int64, size int64, total int64) string {
 	if start+size < total {
-		log.Println(start+size)
-		log.Println(total)
 		return buildLink(addr, start+size, size)
 	}
 	return ""

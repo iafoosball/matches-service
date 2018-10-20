@@ -10,12 +10,12 @@ import (
 )
 
 func TestCreateGoal(*testing.T) {
-	setup()
+	createMatches(10)
 	jsonGoal, _ := json.Marshal(models.Goal{
 		ID:   "goals/1",
 		Key:  "1",
-		From: "matches/test1",
-		To:   "matches/test1",
+		From: "matches/test8",
+		To:   "matches/test8",
 	})
 	if resp, err := http.Post(testURL+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)

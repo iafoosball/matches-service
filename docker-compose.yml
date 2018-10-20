@@ -3,7 +3,7 @@ services:
   matches-service:
     build: './'
     ports:
-      - 8000:9000
+      - 8000:8000
     links:
       - arangodb
     depends_on:
