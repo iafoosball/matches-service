@@ -156,6 +156,9 @@ definitions:
         type: string
         description: The match key
         example: "012345"
+      table_id:
+        type: string
+        description: "the id of table"
       start_time:
         type: string
         description: the datetime when the game ends
@@ -170,7 +173,7 @@ definitions:
         description: Can be either "red" or "blue"
       max_goals:
         type: integer
-        description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
+        description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
         default: 10
       max_time:
         type: integer
@@ -182,42 +185,35 @@ definitions:
         type: boolean
         description: Switch the position after 50% of the goal (time or goals) is reached.
 #      Players properties
-      blue_one_id:
-        type: string
-        description: This is the user id of the first player playing on the blue side.
-      blue_one_position:
+      lobby:
         type: array
         items:
           type: string
-        description: The position of the blue user 1. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      blue_two_id:
-        type: string
-        description: This is the user id of the second player playing on the blue side. (Not used in single)
-      blue_two_position:
+        description: The position of the players
+      blue_defense:
         type: array
         items:
           type: string
-        description: The position of the blue user 2. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      red_one_id:
-        type: string
-        description: This is the user id of the first player playing on the red side.
-      red_one_position:
+        description: 'The position of the blue user playing in defense. This is used when playing 1:1.'
+        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
+      blue_attack:
         type: array
         items:
           type: string
-        description: The position of the red user 1. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      red_two_id:
-        type: string
-        description: This is the user id of the second player playing on the red side. (Not used in single)
-      red_two_position:
+        description: 'The position of the blue users.Not used in 1:1.'
+        example: '[12341234,77777777]. This means they changed at halftime.'
+      red_defense:
         type: array
         items:
           type: string
-        description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
+        description: 'The position of the red user playing in defense. This is used when playing 1:1.'
+        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
+      red_attack:
+        type: array
+        items:
+          type: string
+        description: 'The position of the red users. Not used in 1:1.'
+        example: '[12341234,77777777]. This means they changed at halftime.'
 #      goals properties
       goals_blue:
         type: array
