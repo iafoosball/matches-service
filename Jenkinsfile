@@ -15,6 +15,8 @@ pipeline {
             steps{
                 sh "docker stop matches-service-stag &"
                 sh "docker stop matches-arangodb-stag &"
+                sh "docker rm matches-arangodb-stag &"
+                sh "docker rm matches-service-stag &"
                 sh "sleep 15s"
                 sh "docker-compose build --pull"
 
