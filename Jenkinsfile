@@ -25,7 +25,7 @@ pipeline {
         stage ("Staging") {
                     steps {
                         sh "docker-compose up -d --force-recreate"
-                        sh "sleep 200s"
+                        sh "sleep 60s"
                     }
                 }
         stage ("Test") {
