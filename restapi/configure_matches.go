@@ -56,6 +56,7 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 
 	//[Start: Matches end points]
 	api.PostMatchesHandler = operations.PostMatchesHandlerFunc(matches.CreateMatch())
+	api.GetMatchesHandler = operations.GetMatchesHandlerFunc(matches.PagedMatches())
 	//[End: Matches end points]
 
 	api.ServerShutdown = func() {}
@@ -73,6 +74,7 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
+	matches.Addr(addr)
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

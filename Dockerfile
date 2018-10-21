@@ -2,6 +2,6 @@
 
 FROM golang:1.10 as builder
 
-COPY cmd/matches-server/main .
+COPY cmd/matches-server/matches-server .
 RUN ls
-CMD ["./main", "--port=9000", "--host=0.0.0.0"]
+CMD ["./matches-server", "--port=9000", "--host=0.0.0.0"]

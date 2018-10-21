@@ -3,7 +3,7 @@ services:
   matches-service:
     build: './'
     ports:
-      - 9000:9000
+      - 8000:8000
     links:
       - arangodb
     depends_on:
@@ -13,7 +13,7 @@ services:
     container_name: 'matches-arangodb'
     image: arangodb/arangodb:latest
     ports:
-      - 9001:8529
+      - 8001:8529
     environment:
     - ARANGO_ROOT_PASSWORD=matches-password
     volumes:
