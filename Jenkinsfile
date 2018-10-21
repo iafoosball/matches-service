@@ -25,7 +25,7 @@ pipeline {
         stage ("Staging") {
                     steps {
                         sh "docker-compose up -d --force-recreate"
-                        sh "sleep 100s"
+                        sh "sleep 200s"
                     }
                 }
         stage ("Test") {
@@ -45,6 +45,9 @@ pipeline {
             steps {
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
+                sh "docker rm matches-arangodb-prod &"
+                sh "docker rm matches-service-prod &"
+                sh "sleep 15s"
                 sh "docker-compose up --force-recreate --build"
             }
         }
