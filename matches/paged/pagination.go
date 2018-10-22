@@ -5,7 +5,16 @@ import (
 	"strconv"
 )
 
-// Matches returns a pagination objects.
+// Goals returns a pagination objects with content of array of goals.
+func Goals(g []*models.Goal, url string, start int64, size int64, totalElements int64) *models.PagedGoals {
+	pG := models.PagedGoals{}
+	pG.Page = page(start, size, totalElements)
+	pG.Content = g
+	pG.Links = links(url, start, size, totalElements)
+	return &pG
+}
+
+// Matches returns a pagination objects  with content of array of matches.
 func Matches(m []*models.Match, url string, start int64, size int64, totalElements int64) *models.PagedMatches {
 	pM := models.PagedMatches{}
 	pM.Page = page(start, size, totalElements)

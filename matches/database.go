@@ -183,6 +183,7 @@ func initGraph(name string) driver.Graph {
 
 // Get an integer from a query.
 func queryInt(query string) int {
+	log.Println(query)
 	if cursor, err := db.Query(nil, query, make(map[string]interface{})); err != nil {
 		log.Println(err)
 	} else {
