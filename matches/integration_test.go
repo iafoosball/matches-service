@@ -14,7 +14,7 @@ var (
 	dbPort           string
 	databaseUser     string
 	databasePassword string
-	testURL          string
+	testAddr         string
 )
 
 func init() {
@@ -27,12 +27,13 @@ func init() {
 	flag.StringVar(&databasePassword, "dbpassword", "matches-password", "the port of the matches service where the test should connect")
 
 	flag.Parse()
-	testURL = "http://" + testHost + ":" + testPort + "/"
+	testAddr = "http://" + testHost + ":" + testPort + "/"
 	if i, err := strconv.Atoi(dbPort); err != nil {
 		log.Println(err)
 	} else {
 		InitDatabase(dbHost, i, databaseUser, databasePassword)
 	}
+	log.Println("The test addr is " + testAddr)
 
 	col(matchesColName).Truncate(nil)
 	col(goalsColName).Truncate(nil)

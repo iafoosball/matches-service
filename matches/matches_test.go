@@ -23,7 +23,7 @@ func TestCreateMatch(*testing.T) {
 		Key:        "test" + strconv.Itoa(1),
 		RatedMatch: true,
 	})
-	if resp, err := http.Post(testURL+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(testAddr+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
@@ -35,7 +35,7 @@ func TestPagedMatches(t *testing.T) {
 	start := 981
 	createMatches(totalMatches)
 	var pagedMatches models.PagedMatches
-	query := testURL + "matches/?filter=&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
+	query := testAddr + "matches/?filter=&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
 	for query != "" {
 		log.Println(query)
 		if resp, err = http.Get(query); err != nil || http.StatusOK != resp.StatusCode {
@@ -74,7 +74,7 @@ func BenchmarkCreateMatch(b *testing.B) {
 			Key:        "test" + strconv.Itoa(c),
 			RatedMatch: true,
 		})
-		if resp, err := http.Post(testURL+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
+		if resp, err := http.Post(testAddr+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
 			log.Fatal(err)
 		}

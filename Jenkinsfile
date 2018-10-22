@@ -15,14 +15,17 @@ pipeline {
             steps{
                 sh "docker stop matches-service-stag &"
                 sh "docker stop matches-arangodb-stag &"
+                sh "docker rm matches-arangodb-stag &"
+                sh "docker rm matches-service-stag &"
+                sh "sleep 15s"
                 sh "docker-compose build --pull"
 
             }
         }
         stage ("Staging") {
                     steps {
-                        sh "docker-compose up -d"
-                        sh "sleep 100s"
+                        sh "docker-compose up -d --force-recreate"
+                        sh "sleep 60s"
                     }
                 }
         stage ("Test") {
@@ -42,6 +45,9 @@ pipeline {
             steps {
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
+                sh "docker rm matches-arangodb-prod &"
+                sh "docker rm matches-service-prod &"
+                sh "sleep 15s"
                 sh "docker-compose up --force-recreate --build"
             }
         }

@@ -17,7 +17,7 @@ func TestCreateGoal(*testing.T) {
 		From: "matches/test8",
 		To:   "matches/test8",
 	})
-	if resp, err := http.Post(testURL+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
+	if resp, err := http.Post(testAddr+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
 	}
