@@ -171,6 +171,9 @@ definitions:
         type: string
         description: the corresponding match id
         example: "01234"
+      speed:
+        type: string
+        description: The speed of the goal
       side:
         type: string
         description: The side who scored the goal. Usually either red or blue.
@@ -252,17 +255,6 @@ definitions:
           type: string
         description: 'The position of the red users. Not used in 1:1.'
         example: '[12341234,77777777]. This means they changed at halftime.'
-      #      goals properties
-      goals_blue:
-        type: array
-        items:
-          type: number
-        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added. This could change in the future to maps, if we decide to save the scoring player as well
-      goals_red:
-        type: array
-        items:
-          type: number
-        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added.
 
   PagedGoals:
     type: object
