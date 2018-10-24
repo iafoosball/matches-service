@@ -21,7 +21,7 @@ paths:
       parameters:
       - in: "query"
         name: "filter"
-        description: "Filter parameters for goals. Use something like ?filter=match_id=='test-1'.
+        description: "Filter parameters for goals. Use something like ?filter=matchID=='test-1'.
         Make sure that the field exists and that if the filtered value is a string it should be encapsulated with apostrophes."
         type: "string"
         default: ""
@@ -29,7 +29,7 @@ paths:
         name: "sort"
         description: "The default is new matches at the top."
         type: "string"
-        default: "end_time"
+        default: "endTime"
       - in: "query"
         name: "start"
         description: "The starting item of the list."
@@ -93,7 +93,7 @@ paths:
         name: "sort"
         description: "The default is new matches at the top."
         type: "string"
-        default: "end_time"
+        default: "endTime"
       - in: "query"
         name: "start"
         description: "The starting item of the list."
@@ -167,7 +167,7 @@ definitions:
         type: string
         description: "DO NOT USE! Only use match id"
         example: "matches/01234"
-      match_id:
+      matchID:
         type: string
         description: the corresponding match id
         example: "01234"
@@ -177,10 +177,10 @@ definitions:
       side:
         type: string
         description: The side who scored the goal. Usually either red or blue.
-      position_attack:
+      position:
         type: boolean
         description: This could be used in a double game, if the person attacking scores.
-      datetime:
+      dateTime:
         type: string
         description: The datetime in nanoseconds of the goal.
         example: "1257856852039812612 - Do we want to put additional information here?"
@@ -197,13 +197,17 @@ definitions:
         type: string
         description: The match key
         example: "012345"
-      table_id:
+      tableID:
         type: string
         description: "the id of table"
-      start_time:
+      startTime:
         type: string
         description: the datetime when the game ends
-      end_time:
+      scoreBlue:
+        type: integer
+      scoreRed:
+        type: integer
+      endTime:
         type: string
         description: the datetime when the match ends
       completed:
@@ -212,17 +216,34 @@ definitions:
       winner:
         type: string
         description: Can be either "red" or "blue"
-      max_goals:
+      oneOnOne:
+        type: boolean
+      twoOnTwo:
+        type: boolean
+      twoOnOne:
+        type: boolean
+      tournament:
+        type: boolean
+      freeGame:
+        type: boolean
+      payed:
+        type: boolean
+      started:
+        type: boolean
+      bet:
+        type: boolean
+        description: "Is this game with bets"
+      maxGoals:
         type: integer
         description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
         default: 10
-      max_time:
+      maxTime:
         type: integer
         description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
-      rated_match:
+      ratedMatch:
         type: boolean
         description: A match can be rated, ie a ranked game with points, or without.
-      switch_position:
+      switchPosition:
         type: boolean
         description: Switch the position after 50% of the goal (time or goals) is reached.
       #      Players properties
@@ -231,30 +252,21 @@ definitions:
         items:
           type: string
         description: The position of the players
-      blue_defense:
-        type: array
-        items:
-          type: string
-        description: 'The position of the blue user playing in defense. This is used when playing 1:1.'
-        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
-      blue_attack:
-        type: array
-        items:
-          type: string
-        description: 'The position of the blue users.Not used in 1:1.'
-        example: '[12341234,77777777]. This means they changed at halftime.'
-      red_defense:
-        type: array
-        items:
-          type: string
-        description: 'The position of the red user playing in defense. This is used when playing 1:1.'
-        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
-      red_attack:
-        type: array
-        items:
-          type: string
-        description: 'The position of the red users. Not used in 1:1.'
-        example: '[12341234,77777777]. This means they changed at halftime.'
+      positions:
+        type: object
+        properties:
+          blueDefense:
+            type: string
+            description: THe UID.
+          blueAttach:
+            type: string
+            description: THe UID.
+          redDefense:
+            type: string
+            description: THe UID.
+          redAttack:
+            type: string
+            description: THe UID.
 
   PagedGoals:
     type: object
@@ -300,13 +312,13 @@ definitions:
       size:
         type: integer
         description: 'the size of a page'
-      total_items:
+      totalItems:
         type: integer
         description: 'the number of items in the document'
-      current_page:
+      currentPage:
         type: integer
         description: 'The current page number inside the document'
-      total_pages:
+      totalPages:
         type: integer
         description: 'The number of total pages inside the document'
 
