@@ -246,12 +246,6 @@ definitions:
       switchPosition:
         type: boolean
         description: Switch the position after 50% of the goal (time or goals) is reached.
-      #      Players properties
-      lobby:
-        type: array
-        items:
-          type: string
-        description: The position of the players
       positions:
         type: object
         properties:
