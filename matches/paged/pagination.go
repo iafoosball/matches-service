@@ -3,6 +3,7 @@ package paged
 import (
 	"github.com/iafoosball/matches-service/models"
 	"strconv"
+	"strings"
 )
 
 // Goals returns a pagination objects with content of array of goals.
@@ -12,15 +13,6 @@ func Goals(g []*models.Goal, url string, start int64, size int64, totalElements 
 	pG.Content = g
 	pG.Links = links(url, start, size, totalElements)
 	return &pG
-}
-
-// Matches returns a pagination objects  with content of array of matches.
-func Matches(m []*models.Match, url string, start int64, size int64, totalElements int64) *models.PagedMatches {
-	pM := models.PagedMatches{}
-	pM.Page = page(start, size, totalElements)
-	pM.Content = m
-	pM.Links = links(url, start, size, totalElements)
-	return &pM
 }
 
 func page(start int64, size int64, totalElements int64) *models.Page {
@@ -82,4 +74,12 @@ func last(addr string, start int64, size int64, total int64) string {
 func buildLink(addr string, start int64, size int64) string {
 	link := addr + "&start=" + strconv.FormatInt(start, 10) + "&size=" + strconv.FormatInt(size, 10)
 	return link
+}
+
+// BuildFilter formats the filter correctly for arangodb. If no filter is present an empty string is returned.
+func BuildFilter(filter string) string {
+	if filter != "" {
+		return "Filter doc." + strings.Replace(filter, ",", ", doc.", -1)
+	}
+	return ""
 }
