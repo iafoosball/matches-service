@@ -1,7 +1,6 @@
 package matches
 
 import (
-	"encoding/json"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/iafoosball/matches-service/matches/paged"
 	"github.com/iafoosball/matches-service/models"
@@ -17,12 +16,9 @@ var (
 // Has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
-		if _, err := col(matchesColName).CreateDocument(nil, &params.Body); err != nil {
-			request, _ := json.Marshal(params.Body)
-			log.Println(string(request))
-			log.Println(err)
-		}
-		return operations.NewPostMatchesOK()
+		meta, err := col(matchesColName).CreateDocument(nil, &params.Body)
+		handleErr(err)
+		return operations.NewPostMatchesOK().WithPayload(meta)
 	}
 }
 

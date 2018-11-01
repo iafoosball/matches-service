@@ -53,6 +53,7 @@ func configureAPI(api *operations.MatchesAPI) http.Handler {
 	//[Start: Goals end points]
 	api.GetGoalsHandler = operations.GetGoalsHandlerFunc(matches.PagedGoals())
 	api.PostGoalsHandler = operations.PostGoalsHandlerFunc(matches.CreateGoal())
+	api.PostGoalsBatchCreateHandler = operations.PostGoalsBatchCreateHandlerFunc(matches.BatchCreateGoals())
 	//[End: Goals end points]
 
 	//[Start: Matches end points]

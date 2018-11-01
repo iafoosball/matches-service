@@ -67,6 +67,23 @@ paths:
       responses:
         200:
           description: "Successful created goal"
+  /goals/BatchCreate:
+    post:
+      summary: "Create Goals from an array of goals"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: "#/definitions/Goal"
+      responses:
+        200:
+          description: "Successful created goal"
+
 #    /goals/{match_id}:
 #      get:
 #        summary: "Returns all goals for a match."
@@ -122,6 +139,8 @@ paths:
       summary: "Create a new match"
       consumes:
       - "application/json"
+      produces:
+      - "application/json"
       parameters:
       - in: "body"
         name: "body"
@@ -132,6 +151,9 @@ paths:
       responses:
         200:
           description: "Successful."
+          schema:
+            type: object
+
 
 #  /matches/{match_id}:
 #    get:
@@ -200,6 +222,28 @@ definitions:
       tableID:
         type: string
         description: "the id of table"
+      users:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            username:
+              type: string
+            admin:
+              type: boolean
+            ready:
+              type: boolean
+            position:
+              type: string
+              description: "Can either be attack or defense"
+            bet:
+              type: integer
+              description: "is the amount a user wants to bet on this game"
+            color:
+              type: string
+
       startTime:
         type: string
         description: the datetime when the game ends
