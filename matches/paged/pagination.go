@@ -8,11 +8,11 @@ import (
 
 // Goals returns a pagination objects with content of array of goals.
 func Goals(g []*models.Goal, url string, start int64, size int64, totalElements int64) *models.PagedGoals {
-	pG := models.PagedGoals{}
-	pG.Page = page(start, size, totalElements)
-	pG.Content = g
-	pG.Links = links(url, start, size, totalElements)
-	return &pG
+	pg := models.PagedGoals{}
+	pg.Page = page(start, size, totalElements)
+	pg.Content = g
+	pg.Links = links(url, start, size, totalElements)
+	return &pg
 }
 
 func page(start int64, size int64, totalElements int64) *models.Page {
