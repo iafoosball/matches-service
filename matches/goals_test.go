@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestCreateGoal(*testing.T) {
@@ -23,6 +24,33 @@ func TestCreateGoal(*testing.T) {
 	if resp, err := http.Post(testAddr+"goals/", "application/json", bytes.NewReader(jsonGoal)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
 		log.Fatal(err)
+	}
+}
+
+func TestBatchCreateGoals(t *testing.T) {
+	createMatches(10)
+	goals := []*models.Goal{
+		&models.Goal{
+			DateTime: time.Now().Format(time.RFC3339),
+			Position: false,
+			Side:     "attack",
+		},
+		&models.Goal{
+			DateTime: time.Now().Format(time.RFC3339),
+			Position: false,
+			Side:     "attack",
+		},
+		&models.Goal{
+			DateTime: time.Now().Format(time.RFC3339),
+			Position: false,
+			Side:     "attack",
+		},
+	}
+	jsonGoals, _ := json.Marshal(goals)
+	resp, err := http.Post(testAddr+"goals/", "application/json", bytes.NewReader(jsonGoals))
+	handleErr(err)
+	if http.StatusOK != resp.StatusCode {
+		log.Fatal("Not OK.")
 	}
 }
 
