@@ -34,20 +34,26 @@ func TestBatchCreateGoals(t *testing.T) {
 			DateTime: time.Now().Format(time.RFC3339),
 			Position: false,
 			Side:     "attack",
+			From:     "matches/test-1",
+			To:       "matches/test-1",
 		},
 		&models.Goal{
 			DateTime: time.Now().Format(time.RFC3339),
 			Position: false,
 			Side:     "attack",
+			From:     "matches/test-1",
+			To:       "matches/test-1",
 		},
 		&models.Goal{
 			DateTime: time.Now().Format(time.RFC3339),
 			Position: false,
 			Side:     "attack",
+			From:     "matches/test-1",
+			To:       "matches/test-1",
 		},
 	}
 	jsonGoals, _ := json.Marshal(goals)
-	resp, err := http.Post(testAddr+"goals/", "application/json", bytes.NewReader(jsonGoals))
+	resp, err := http.Post(testAddr+"goals/BatchCreate", "application/json", bytes.NewReader(jsonGoals))
 	handleErr(err)
 	if http.StatusOK != resp.StatusCode {
 		log.Fatal("Not OK.")
