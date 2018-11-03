@@ -245,40 +245,40 @@ definitions:
               type: string
 
       settings:
-        type: array
-        items:
-          type: object
-          properties:
-            oneOnOne:
-              type: boolean
-            twoOnTwo:
-              type: boolean
-            twoOnOne:
-              type: boolean
-            tournament:
-              type: boolean
-            freeGame:
-              type: boolean
-            payed:
-              type: boolean
-            started:
-              type: boolean
-            bet:
-              type: boolean
-              description: "Is this game with bets"
-            maxGoals:
-              type: integer
-              description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
-              default: 10
-            maxTime:
-              type: integer
-              description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
-            ratedMatch:
-              type: boolean
-              description: A match can be rated, ie a ranked game with points, or without.
-            switchPosition:
-              type: boolean
-              description: Switch the position after 50% of the goal (time or goals) is reached.
+        type: object
+        properties:
+          oneOnOne:
+            type: boolean
+          twoOnTwo:
+            type: boolean
+          twoOnOne:
+            type: boolean
+          tournament:
+            type: boolean
+          drunk:
+            type: boolean
+          freeGame:
+            type: boolean
+          payed:
+            type: boolean
+          started:
+            type: boolean
+          bet:
+            type: boolean
+            description: "Is this game with bets"
+          maxGoals:
+            type: integer
+            description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
+            default: 10
+          maxTime:
+            type: integer
+            description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
+          ratedMatch:
+            type: boolean
+            description: A match can be rated, ie a ranked game with points, or without.
+          switchPosition:
+            type: boolean
+            description: Switch the position after 50% of the goal (time or goals) is reached.
       startTime:
         type: string
         description: the datetime when the game ends
