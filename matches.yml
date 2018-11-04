@@ -302,7 +302,7 @@ definitions:
           blueDefense:
             type: string
             description: THe UID.
-          blueAttach:
+          blueAttack:
             type: string
             description: THe UID.
           redDefense:
