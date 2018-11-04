@@ -22,9 +22,8 @@ func TestInitDatabase(*testing.T) {
 
 func TestGraph(*testing.T) {
 	jsonObject, _ := json.Marshal(models.Match{
-		ID:         "matches/test" + strconv.Itoa(3),
-		Key:        "test" + strconv.Itoa(3),
-		RatedMatch: true,
+		ID:  "matches/test" + strconv.Itoa(3),
+		Key: "test" + strconv.Itoa(3),
 	})
 	if resp, err := http.Post(testAddr+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
