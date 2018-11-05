@@ -19,9 +19,8 @@ var (
 
 func TestCreateMatch(*testing.T) {
 	jsonObject, _ := json.Marshal(models.Match{
-		ID:         "matches/test" + strconv.Itoa(1),
-		Key:        "test" + strconv.Itoa(1),
-		RatedMatch: true,
+		ID:  "matches/test" + strconv.Itoa(1),
+		Key: "test" + strconv.Itoa(1),
 	})
 	if resp, err := http.Post(testAddr+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 		log.Println(resp)
