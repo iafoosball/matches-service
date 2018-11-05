@@ -1,4 +1,5 @@
 #swagger generate server -f matches.yml -A matches
+#for jonas finding pi in local network: sudo nmap -sP 195.249.187.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
 #go run ../../go-swagger/go-swagger/cmd/swagger/swagger.go generate server -f matches.yml -A matches
 #go run main.go --port=4450
 swagger: "2.0"
@@ -210,7 +211,6 @@ definitions:
   Match:
     type: object
     properties:
-      #      Match properties
       _id:
         type: string
         description: The match id which is the collection + "/" + the key
@@ -269,7 +269,6 @@ definitions:
           maxGoals:
             type: integer
             description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
-            default: 10
           maxTime:
             type: integer
             description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
