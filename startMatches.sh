@@ -6,4 +6,5 @@ cd cmd/matches-server
 go build .
 cd ../..
 
-docker-compose up --build --force-recreate
+docker-compose up --build
+#docker-compose up --build --force-recreate

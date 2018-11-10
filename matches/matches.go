@@ -16,6 +16,7 @@ var (
 // Has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
+		log.Println(*params.Body)
 		meta, err := col(matchesColName).CreateDocument(nil, &params.Body)
 		handleErr(err)
 		return operations.NewPostMatchesOK().WithPayload(meta)
