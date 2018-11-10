@@ -19,7 +19,6 @@ pipeline {
                 sh "docker rm matches-service-stag &"
                 sh "sleep 15s"
                 sh "docker-compose build --pull"
-
             }
         }
         stage ("Staging") {
