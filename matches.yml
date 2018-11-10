@@ -222,6 +222,8 @@ definitions:
       tableID:
         type: string
         description: "the id of table"
+      started:
+        type: boolean
       users:
         type: array
         items:
@@ -260,8 +262,6 @@ definitions:
           freeGame:
             type: boolean
           payed:
-            type: boolean
-          startMatch:
             type: boolean
           bet:
             type: boolean
