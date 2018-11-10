@@ -69,9 +69,8 @@ func TestPagedMatches(t *testing.T) {
 func BenchmarkCreateMatch(b *testing.B) {
 	for c := 0; c < b.N; c++ {
 		jsonObject, _ := json.Marshal(models.Match{
-			ID:         "matches/test" + strconv.Itoa(c),
-			Key:        "test" + strconv.Itoa(c),
-			RatedMatch: true,
+			ID:  "matches/test" + strconv.Itoa(c),
+			Key: "test" + strconv.Itoa(c),
 		})
 		if resp, err := http.Post(testAddr+"matches/", "application/json", bytes.NewReader(jsonObject)); err != nil || http.StatusOK != resp.StatusCode {
 			log.Println(resp)
@@ -88,10 +87,9 @@ func TestDeleteMatch(*testing.T) {
 func createMatches(amount int) {
 	for c := 0; c < amount; c++ {
 		_, _ = col(matchesColName).CreateDocument(nil, models.Match{
-			Key:        "test-" + strconv.Itoa(c),
-			ID:         "matches/test-" + strconv.Itoa(c),
-			EndTime:    strconv.Itoa(c),
-			RatedMatch: true},
+			Key:     "test-" + strconv.Itoa(c),
+			ID:      "matches/test-" + strconv.Itoa(c),
+			EndTime: strconv.Itoa(c)},
 		)
 	}
 }

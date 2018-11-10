@@ -278,6 +278,9 @@ definitions:
           switchPositions:
             type: boolean
             description: Switch the position after 50% of the goal (time or goals) is reached.
+          tournamentMode:
+            type: boolean
+            description: Thats for chaning to a mode where each game goes until. Default side with two players is red.
       startTime:
         type: string
         description: the datetime when the game ends
