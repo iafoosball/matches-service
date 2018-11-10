@@ -1,30 +1,25 @@
 package matches
 
 import (
-	"encoding/json"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/iafoosball/matches-service/matches/paged"
 	"github.com/iafoosball/matches-service/models"
 	"github.com/iafoosball/matches-service/restapi/operations"
 	"log"
-	"strconv"
-	"strings"
 )
 
 var (
 	err error
 )
 
-// CreateMatch creates a match from the input
+// CreateMatch creates a match from the input. This is normally done through the Livematch and a full Match is expected.
 // Has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
-		if _, err := col(matchesColName).CreateDocument(nil, &params.Body); err != nil {
-			request, _ := json.Marshal(params.Body)
-			log.Println(string(request))
-			log.Println(err)
-		}
-		return operations.NewPostMatchesOK()
+		log.Println(*params.Body)
+		meta, err := col(matchesColName).CreateDocument(nil, &params.Body)
+		handleErr(err)
+		return operations.NewPostMatchesOK().WithPayload(meta)
 	}
 }
 
@@ -32,18 +27,9 @@ func CreateMatch() func(params operations.PostMatchesParams) middleware.Responde
 // has test (maybe rework)
 func PagedMatches() func(params operations.GetMatchesParams) middleware.Responder {
 	return func(params operations.GetMatchesParams) middleware.Responder {
-		sort := *params.Sort
-		sort = "Sort doc." + strings.Replace(sort, ",", ", doc.", -1)
-		filter := *params.Filter
-		if filter != "" {
-			filter = "Filter doc." + strings.Replace(filter, ",", ", doc.", -1)
-		}
-		// is this possible in one query, getting number of total items and the selected items?
-		query := "FOR doc IN matches " + filter + " " + sort + " " + *params.Order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
-		matches := queryMatches(query)
-		query = "For doc In matches " + filter + " COLLECT WITH COUNT INTO length RETURN length"
+		matches := queryMatches(paged.MatchesQuery(params))
+		query := "For doc In matches " + paged.BuildFilter(*params.Filter) + " COLLECT WITH COUNT INTO length RETURN length"
 		total := int64(queryInt(query))
-
 		url := addr + "/matches/?filter=" + *params.Filter + "&sort=" + *params.Sort + "&order=" + *params.Order
 		a := paged.Matches(matches, url, *params.Start, *params.Size, total)
 		return operations.NewGetMatchesOK().WithPayload(a)
@@ -67,25 +53,6 @@ func playingWithStuffGetAllGoalsFromMatch() {
 	log.Println()
 }
 
-//func GetUserByID() func(params operations.GetUsersUserIDParams) middleware.Responder {
-//	return func(params operations.GetUsersUserIDParams) middleware.Responder {
-//		//Log the user
-//		var u = models.User{}
-//		_, _ = colMatches.ReadDocument(nil, params.UserID, &u)
-//		return operations.NewGetUsersUserIDOK().WithPayload(&u)
-//	}
-//}
-//
-//func CreateUser() func(params operations.PostUsersParams) middleware.Responder {
-//	return func(params operations.PostUsersParams) middleware.Responder {
-//		u := params.Body
-//		meta, _ := colMatches.CreateDocument(nil, u)
-//		u.UserID = meta.Key
-//		colMatches.UpdateDocument(nil, meta.Key, u)
-//		return operations.NewGetUsersUserIDOK()
-//	}
-//}
-
 // Gets a query as string and a slice and returns that slice with references to the found matches.
 func queryMatches(query string) []*models.Match {
 	matches := []*models.Match{}
@@ -95,11 +62,17 @@ func queryMatches(query string) []*models.Match {
 		defer cursor.Close()
 		for cursor.HasMore() {
 			match := &models.Match{}
-			if _, err = cursor.ReadDocument(nil, match); err != nil {
-				log.Println(err)
-			}
+			_, err := cursor.ReadDocument(nil, match)
+			handleErr(err)
 			matches = append(matches, match)
 		}
 	}
 	return matches
+}
+
+// Generic method to handle errors
+func handleErr(err error) {
+	if err != nil {
+		log.Println(err)
+	}
 }

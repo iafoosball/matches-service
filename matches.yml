@@ -1,4 +1,5 @@
 #swagger generate server -f matches.yml -A matches
+#for jonas finding pi in local network: sudo nmap -sP 195.249.187.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
 #go run ../../go-swagger/go-swagger/cmd/swagger/swagger.go generate server -f matches.yml -A matches
 #go run main.go --port=4450
 swagger: "2.0"
@@ -15,7 +16,44 @@ schemes:
 produces:
 - "application/json"
 paths:
-  /goals:
+  /goals/:
+    get:
+      summary: "Get a single goal."
+      parameters:
+      - in: "query"
+        name: "filter"
+        description: "Filter parameters for goals. Use something like ?filter=matchID=='test-1'.
+        Make sure that the field exists and that if the filtered value is a string it should be encapsulated with apostrophes."
+        type: "string"
+        default: ""
+      - in: "query"
+        name: "sort"
+        description: "The default is new matches at the top."
+        type: "string"
+        default: "endTime"
+      - in: "query"
+        name: "start"
+        description: "The starting item of the list."
+        type: "integer"
+        minimum: 1
+        default: 1
+      - in: "query"
+        name: "order"
+        description: "Order ascending or descending, either ASC or DESC. DESC the default value in order to return latest matches first."
+        type: "string"
+        default: "DESC"
+      - in: "query"
+        name: "size"
+        description: "The number of items to be returned. Defaults to 5, max is 10000."
+        type: "integer"
+        maximum: 10000
+        minimum: 1
+        default: 5
+      responses:
+        200:
+          description: "Successful created goal"
+          schema:
+            $ref: "#/definitions/PagedGoals"
     post:
       summary: "Create a new goal. The tables only sends information gathered by it.
                 This means information included here must be match id, the side of the goal and the datetime."
@@ -30,33 +68,50 @@ paths:
       responses:
         200:
           description: "Successful created goal"
-  /goals/{goal_id}:
-    get:
-      summary: Should this be allowed???? Get a single goal.
+  /goals/BatchCreate:
+    post:
+      summary: "Create Goals from an array of goals"
+      consumes:
+      - "application/json"
       parameters:
-      - in: "path"
-        name: "goal_id"
-        description: The goal id.
-        type: string
+      - in: "body"
+        name: "body"
         required: true
+        schema:
+          type: array
+          items:
+            $ref: "#/definitions/Goal"
       responses:
         200:
           description: "Successful created goal"
+
+#    /goals/{match_id}:
+#      get:
+#        summary: "Returns all goals for a match."
+#        parameters:
+#          - in: "path"
+#            name: "match_id"
+#            description: "The match id."
+#            type: string
+#            required: true
+#        responses:
+#          200:
+#            description: "Successful."
+
   /matches/:
     get:
       summary: "Get a page of Recipients. Sort and Order can not be empty strings, don't define them if you don't need them."
       parameters:
       - in: "query"
         name: "filter"
-        description: "Not Implemented!!! Filter parameters for the matches.
-        Hopefully looks something like goals_red>10"
+        description: " Filter parameters for the matches."
         type: "string"
         default: ""
       - in: "query"
         name: "sort"
         description: "The default is new matches at the top."
         type: "string"
-        default: "end_time"
+        default: "endTime"
       - in: "query"
         name: "start"
         description: "The starting item of the list."
@@ -85,6 +140,8 @@ paths:
       summary: "Create a new match"
       consumes:
       - "application/json"
+      produces:
+      - "application/json"
       parameters:
       - in: "body"
         name: "body"
@@ -95,6 +152,9 @@ paths:
       responses:
         200:
           description: "Successful."
+          schema:
+            type: object
+
 
 #  /matches/{match_id}:
 #    get:
@@ -124,22 +184,26 @@ definitions:
         example: "012345"
       _from:
         type: string
-        description: The match id
+        description: "DO NOT USE! Only use match id"
         example: "matches/01234"
       _to:
         type: string
-        description: Same as from
+        description: "DO NOT USE! Only use match id"
         example: "matches/01234"
-      goal_id:
+      matchID:
         type: string
-        description: The unique match id.
+        description: the corresponding match id
+        example: "01234"
+      speed:
+        type: string
+        description: The speed of the goal
       side:
         type: string
         description: The side who scored the goal. Usually either red or blue.
-      position_attack:
+      position:
         type: boolean
         description: This could be used in a double game, if the person attacking scores.
-      datetime:
+      dateTime:
         type: string
         description: The datetime in nanoseconds of the goal.
         example: "1257856852039812612 - Do we want to put additional information here?"
@@ -147,7 +211,6 @@ definitions:
   Match:
     type: object
     properties:
-#      Match properties
       _id:
         type: string
         description: The match id which is the collection + "/" + the key
@@ -156,10 +219,73 @@ definitions:
         type: string
         description: The match key
         example: "012345"
-      start_time:
+      tableID:
+        type: string
+        description: "the id of table"
+      started:
+        type: boolean
+      users:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            username:
+              type: string
+            admin:
+              type: boolean
+            ready:
+              type: boolean
+            position:
+              type: string
+              description: "Can either be attack or defense"
+            bet:
+              type: integer
+              description: "is the amount a user wants to bet on this game"
+            color:
+              type: string
+
+      settings:
+        type: object
+        properties:
+          oneOnOne:
+            type: boolean
+          twoOnTwo:
+            type: boolean
+          twoOnOne:
+            type: boolean
+          tournament:
+            type: boolean
+          drunk:
+            type: boolean
+          freeGame:
+            type: boolean
+          payed:
+            type: boolean
+          bet:
+            type: boolean
+            description: "Is this game with bets"
+          maxGoals:
+            type: integer
+            description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
+          maxTime:
+            type: integer
+            description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
+          rated:
+            type: boolean
+            description: A match can be rated, ie a ranked game with points, or without.
+          switchPositions:
+            type: boolean
+            description: Switch the position after 50% of the goal (time or goals) is reached.
+      startTime:
         type: string
         description: the datetime when the game ends
-      end_time:
+      scoreBlue:
+        type: integer
+      scoreRed:
+        type: integer
+      endTime:
         type: string
         description: the datetime when the match ends
       completed:
@@ -168,68 +294,35 @@ definitions:
       winner:
         type: string
         description: Can be either "red" or "blue"
-      max_goals:
-        type: integer
-        description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
-        default: 10
-      max_time:
-        type: integer
-        description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
-      rated_match:
-        type: boolean
-        description: A match can be rated, ie a ranked game with points, or without.
-      switch_position:
-        type: boolean
-        description: Switch the position after 50% of the goal (time or goals) is reached.
-#      Players properties
-      blue_one_id:
-        type: string
-        description: This is the user id of the first player playing on the blue side.
-      blue_one_position:
-        type: array
-        items:
-          type: string
-        description: The position of the blue user 1. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      blue_two_id:
-        type: string
-        description: This is the user id of the second player playing on the blue side. (Not used in single)
-      blue_two_position:
-        type: array
-        items:
-          type: string
-        description: The position of the blue user 2. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      red_one_id:
-        type: string
-        description: This is the user id of the first player playing on the red side.
-      red_one_position:
-        type: array
-        items:
-          type: string
-        description: The position of the red user 1. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-      red_two_id:
-        type: string
-        description: This is the user id of the second player playing on the red side. (Not used in single)
-      red_two_position:
-        type: array
-        items:
-          type: string
-        description: The position of the red user 2. As this can vary during a game, use the notatation datetime\position
-        example: [12341234/attack,12341245/defense]
-#      goals properties
-      goals_blue:
-        type: array
-        items:
-          type: number
-        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added. This could change in the future to maps, if we decide to save the scoring player as well
-      goals_red:
-        type: array
-        items:
-          type: number
-        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added.
 
+      positions:
+        type: object
+        properties:
+          blueDefense:
+            type: string
+            description: THe UID.
+          blueAttack:
+            type: string
+            description: THe UID.
+          redDefense:
+            type: string
+            description: THe UID.
+          redAttack:
+            type: string
+            description: THe UID.
+
+  PagedGoals:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Goal'
+      page:
+        type: object
+        $ref: '#/definitions/Page'
   PagedMatches:
     type: object
     properties:
@@ -262,15 +355,16 @@ definitions:
       size:
         type: integer
         description: 'the size of a page'
-      total_items:
+      totalItems:
         type: integer
         description: 'the number of items in the document'
-      current_page:
+      currentPage:
         type: integer
         description: 'The current page number inside the document'
-      total_pages:
+      totalPages:
         type: integer
         description: 'The number of total pages inside the document'
+
 
 
 

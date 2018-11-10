@@ -1,0 +1,170 @@
+definitions:
+  Goal:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: The goal id, which is the collection + "/" + the key
+        example: "goals/01234"
+      _key:
+        type: string
+        description: The goal key
+        example: "012345"
+      _from:
+        type: string
+        description: "DO NOT USE! Only use match id"
+        example: "matches/01234"
+      _to:
+        type: string
+        description: "DO NOT USE! Only use match id"
+        example: "matches/01234"
+      match_id:
+        type: string
+        description: the corresponding match id
+        example: "01234"
+      side:
+        type: string
+        description: The side who scored the goal. Usually either red or blue.
+      position_attack:
+        type: boolean
+        description: This could be used in a double game, if the person attacking scores.
+      datetime:
+        type: string
+        description: The datetime in nanoseconds of the goal.
+        example: "1257856852039812612 - Do we want to put additional information here?"
+
+  Match:
+    type: object
+    properties:
+      #      Match properties
+      _id:
+        type: string
+        description: The match id which is the collection + "/" + the key
+        example: "matches/01234"
+      _key:
+        type: string
+        description: The match key
+        example: "012345"
+      table_id:
+        type: string
+        description: "the id of table"
+      start_time:
+        type: string
+        description: the datetime when the game ends
+      end_time:
+        type: string
+        description: the datetime when the match ends
+      completed:
+        type: boolean
+        description: Was the game completed.
+      winner:
+        type: string
+        description: Can be either "red" or "blue"
+      max_goals:
+        type: integer
+        description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
+        default: 10
+      max_time:
+        type: integer
+        description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.
+      rated_match:
+        type: boolean
+        description: A match can be rated, ie a ranked game with points, or without.
+      switch_position:
+        type: boolean
+        description: Switch the position after 50% of the goal (time or goals) is reached.
+      #      Players properties
+      lobby:
+        type: array
+        items:
+          type: string
+        description: The position of the players
+      blue_defense:
+        type: array
+        items:
+          type: string
+        description: 'The position of the blue user playing in defense. This is used when playing 1:1.'
+        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
+      blue_attack:
+        type: array
+        items:
+          type: string
+        description: 'The position of the blue users.Not used in 1:1.'
+        example: '[12341234,77777777]. This means they changed at halftime.'
+      red_defense:
+        type: array
+        items:
+          type: string
+        description: 'The position of the red user playing in defense. This is used when playing 1:1.'
+        example: '[12341234]. No change in position (not an indication that is was not a 2:2!'
+      red_attack:
+        type: array
+        items:
+          type: string
+        description: 'The position of the red users. Not used in 1:1.'
+        example: '[12341234,77777777]. This means they changed at halftime.'
+      #      goals properties
+      goals_blue:
+        type: array
+        items:
+          type: number
+        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added. This could change in the future to maps, if we decide to save the scoring player as well
+      goals_red:
+        type: array
+        items:
+          type: number
+        description: We only save the goal speed. So the goal speed counts as goal. We use zero as default value, for example if a goal is manually added.
+
+  PagedGoals:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Goal'
+      page:
+        type: object
+        $ref: '#/definitions/Page'
+  PagedMatches:
+    type: object
+    properties:
+      links:
+        $ref: '#/definitions/Links'
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Match'
+      page:
+        type: object
+        $ref: '#/definitions/Page'
+  Links:
+    type: array
+    items:
+      type: object
+      properties:
+        rel:
+          type: string
+          description: "The link to the first page"
+        href:
+          type: string
+          description: "The link to the previous page."
+  Page:
+    type: object
+    properties:
+      start:
+        type: integer
+        description: 'The first item in the page out of the document'
+      size:
+        type: integer
+        description: 'the size of a page'
+      total_items:
+        type: integer
+        description: 'the number of items in the document'
+      current_page:
+        type: integer
+        description: 'The current page number inside the document'
+      total_pages:
+        type: integer
+        description: 'The number of total pages inside the document'
