@@ -68,7 +68,7 @@ func TestPagedGoals(t *testing.T) {
 	createMatches(totalMatches)
 	createGoals(totalGoals)
 	var pagedGoals models.PagedGoals
-	query := testAddr + "goals/?filter=match_id=='test-1'&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
+	query := testAddr + "goals/?filter=matchID=='test-1'&ASC=false&size=" + strconv.Itoa(size) + "&start=" + strconv.Itoa(start)
 	for query != "" {
 		log.Println(query)
 		if resp, err = http.Get(query); err != nil || http.StatusOK != resp.StatusCode {
@@ -78,6 +78,7 @@ func TestPagedGoals(t *testing.T) {
 			log.Fatal(err)
 		}
 		err = json.NewDecoder(strings.NewReader(string(body))).Decode(&pagedGoals)
+		log.Println(pagedGoals)
 		for _, m := range pagedGoals.Links {
 			if m.Rel == "Next" && m.Href != "" {
 				query = m.Href
