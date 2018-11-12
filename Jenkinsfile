@@ -20,7 +20,7 @@ pipeline {
                 sh "sleep 15s"
                 sh "docker-compose build --pull"
                 laaa
-                sh "sed -i '$ d' .env"
+                sh "sed -i '\$ d' .env"
             }
         }
 
