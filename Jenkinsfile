@@ -3,32 +3,30 @@ pipeline {
 
     stages {
         stage ("Prepare stag environment") {
-            environment {
-                DB_KEY_PROD=credentials('arangoMatchesProd')
-            }
             steps {
-                sh "printf ${DB_KEY_PROD} >> .env"
-
-                sh "rm docker-compose.yml && rm Dockerfile"
-                sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
-            }
-        }
-
-        stage ("Build") {
-            steps{
                 sh "docker stop matches-service-stag &"
                 sh "docker stop matches-arangodb-stag &"
                 sh "docker rm matches-arangodb-stag &"
                 sh "docker rm matches-service-stag &"
+            }
+        }
+
+        stage ("Build") {
+            environment {
+                DB_KEY_PROD=credentials('arangoMatchesProd')
+            }
+            steps{
+                sh "printf ${DB_KEY_PROD} >> .env"
                 sh "sleep 15s"
                 sh "docker-compose build --pull"
+                sh "sed -i '$ d' .env"
             }
         }
 
         stage ("Staging") {
             steps {
                 sh "docker-compose up -d --force-recreate"
-                sh "sleep 60s"
+                sh "sleep 30s"
             }
         }
 
@@ -49,6 +47,9 @@ pipeline {
 
         stage ("Production") {
             steps {
+
+                            DB_KEY_PROD=credentials('arangoMatchesProd')
+
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
                 sh "docker rm matches-arangodb-prod &"

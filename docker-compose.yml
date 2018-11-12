@@ -15,7 +15,7 @@ services:
     ports:
       - 8001:8529
     environment:
-    - ARANGO_ROOT_PASSWORD=matches-password
+    - ARANGO_ROOT_PASSWORD=${arangoPassword
     volumes:
     - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
 
