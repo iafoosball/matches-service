@@ -2,8 +2,8 @@ version: '3'
 services:
   matches-service:
     build: './'
-    ports:
-      - ${servicePortProd}:8000
+#    ports:
+#      - ${servicePort}:8000
     links:
       - arangodb
     depends_on:
@@ -19,23 +19,23 @@ services:
     volumes:
     - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
 
-
-services:
-  matches-service-prod:
-    container_name: 'matches-service-prod'
-    build: './'
-    ports:
-    - 9000:9000
-    links:
-    - matches-arangodb-prod
-    depends_on:
-    - "matches-arangodb-prod"
-  matches-arangodb-prod:
-    container_name: 'matches-arangodb-prod'
-    image: arangodb/arangodb:latest
-    ports:
-    - 9001:8529
-    environment:
-    - ARANGO_ROOT_PASSWORD=iafoosball@matches for the win
-    volumes:
-    - /var/lib/iafoosball/prod/arango/matches:/var/lib/arangodb3
+#
+#services:
+#  matches-service-prod:
+#    container_name: 'matches-service-prod'
+#    build: './'
+#    ports:
+#    - 9000:9000
+#    links:
+#    - matches-arangodb-prod
+#    depends_on:
+#    - "matches-arangodb-prod"
+#  matches-arangodb-prod:
+#    container_name: 'matches-arangodb-prod'
+#    image: arangodb/arangodb:latest
+#    ports:
+#    - 9001:8529
+#    environment:
+#    - ARANGO_ROOT_PASSWORD=iafoosball@matches for the win
+#    volumes:
+#    - /var/lib/iafoosball/prod/arango/matches:/var/lib/arangodb3

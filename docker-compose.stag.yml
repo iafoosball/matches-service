@@ -1,0 +1,5 @@
+version: '3'
+services:
+  matches-service:
+    ports:
+    - ${servicePortStag}:8000

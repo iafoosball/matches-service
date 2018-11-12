@@ -1,12 +1,14 @@
 pipeline {
     agent any
-    environment {
-        COMPOSE_FILE = "docker-compose.yml"
-    }
 
     stages {
         stage ("Prepare stag environment") {
+            environment {
+                DB_KEY_PROD=credentials('arangoMatchesProd')
+            }
             steps {
+                cat ${DB_KEY_PROD} >> .env
+
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
             }
