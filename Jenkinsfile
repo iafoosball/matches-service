@@ -19,6 +19,7 @@ pipeline {
                 sh "printf ${DB_KEY_PROD} >> .env"
                 sh "sleep 15s"
                 sh "docker-compose build --pull"
+                sh blaaa
                 sh "sed -i '$ d' .env"
             }
         }
