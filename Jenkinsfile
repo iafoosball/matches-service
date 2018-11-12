@@ -7,12 +7,13 @@ pipeline {
                 DB_KEY_PROD=credentials('arangoMatchesProd')
             }
             steps {
-                cat ${DB_KEY_PROD} >> .env
+                sh "cat ${DB_KEY_PROD} >> .env"
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
             }
         }
+
         stage ("Build") {
             steps{
                 sh "docker stop matches-service-stag &"
@@ -23,25 +24,29 @@ pipeline {
                 sh "docker-compose build --pull"
             }
         }
+
         stage ("Staging") {
-                    steps {
-                        sh "docker-compose up -d --force-recreate"
-                        sh "sleep 60s"
-                    }
-                }
+            steps {
+                sh "docker-compose up -d --force-recreate"
+                sh "sleep 60s"
+            }
+        }
+
         stage ("Test") {
             steps {
                 sh "docker cp matches-service-stag:/root/matches.test ."
                 sh "./matches.test"
             }
         }
+
         stage ("Prepare prod environment") {
-                    steps {
-                        sh "rm docker-compose.yml && rm Dockerfile"
-                        sh "cp ../iaf-configs/matches-service/prod/docker-compose.yml . && cp ../iaf-configs/matches-service/prod/Dockerfile ."
-                        sh "cp -rf matches.yml /var/lib/iafoosball/swagger-ui/ &"
-                    }
-                }
+            steps {
+                sh "rm docker-compose.yml && rm Dockerfile"
+                sh "cp ../iaf-configs/matches-service/prod/docker-compose.yml . && cp ../iaf-configs/matches-service/prod/Dockerfile ."
+                sh "cp -rf matches.yml /var/lib/iafoosball/swagger-ui/ &"
+            }
+        }
+
         stage ("Production") {
             steps {
                 sh "docker stop matches-service-prod &"
