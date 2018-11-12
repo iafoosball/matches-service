@@ -13,13 +13,12 @@ pipeline {
 
         stage ("Build") {
             environment {
-                DB_KEY_PROD=credentials('arangoMatchesProd')
+                DB_PW_Stag=credentials('arangoMatchesStag)
             }
             steps{
-                sh "printf ${DB_KEY_PROD} >> .env"
-                sh "sleep 15s"
+                sh "sed -i '\$ d' .env"
+                sh "printf ${DB_PW_STAG} >> .env"
                 sh "docker-compose build --pull"
-                sh "laa"
                 sh "sed -i '\$ d' .env"
             }
         }

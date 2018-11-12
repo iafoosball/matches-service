@@ -2,8 +2,6 @@ version: '3'
 services:
   matches-service:
     build: './'
-#    ports:
-#      - ${servicePort}:8000
     links:
       - arangodb
     depends_on:
@@ -15,9 +13,7 @@ services:
     ports:
       - 8001:8529
     environment:
-    - ARANGO_ROOT_PASSWORD=${arangoPassword
-    volumes:
-    - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
+      - ARANGO_ROOT_PASSWORD=${arangoPassword}
 
 #
 #services:

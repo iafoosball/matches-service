@@ -4,4 +4,4 @@ FROM golang:1.10 as builder
 
 COPY cmd/matches-server/matches-service .
 RUN ls
-CMD ["./matches-service", "${servicePortProd}=8000", "--host=0.0.0.0"]
+CMD ["./matches-service", "--port=8000", "--host=0.0.0.0"]

@@ -2,4 +2,9 @@ version: '3'
 services:
   matches-service:
     ports:
-    - ${servicePortStag}:8000
+    - 8000:8000
+  arangodb:
+    ports:
+      - 8001:8529
+    volumes:
+      - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
