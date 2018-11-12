@@ -49,8 +49,6 @@ pipeline {
         stage ("Production") {
             steps {
 
-                            DB_KEY_PROD=credentials('arangoMatchesProd')
-
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
                 sh "docker rm matches-arangodb-prod &"
