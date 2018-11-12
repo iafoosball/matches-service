@@ -7,7 +7,7 @@ pipeline {
                 DB_KEY_PROD=credentials('arangoMatchesProd')
             }
             steps {
-                sh "cat ${DB_KEY_PROD} >> .env"
+                sh "printf ${DB_KEY_PROD} >> .env"
 
                 sh "rm docker-compose.yml && rm Dockerfile"
                 sh "cp ../iaf-configs/matches-service/stag/docker-compose.yml . && cp ../iaf-configs/matches-service/stag/Dockerfile ."
