@@ -18,7 +18,7 @@ pipeline {
             steps{
                 sh "sed -i '\$ d' .env"
                 sh "printf ${DB_PW_STAG} >> .env"
-                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build --pull --force-recreate"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build --pull"
                 sh "sed -i '\$ d' .env"
             }
         }
