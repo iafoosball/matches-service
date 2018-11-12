@@ -18,14 +18,14 @@ pipeline {
             steps{
                 sh "sed -i '\$ d' .env"
                 sh "printf ${DB_PW_STAG} >> .env"
-                sh "docker-compose build --pull"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build --pull"
                 sh "sed -i '\$ d' .env"
             }
         }
 
         stage ("Staging") {
             steps {
-                sh "docker-compose up -d --force-recreate"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml -d --force-recreate"
                 sh "sleep 30s"
             }
         }
