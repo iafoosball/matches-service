@@ -13,7 +13,7 @@ pipeline {
 
         stage ("Build") {
             environment {
-                DB_PW_Stag=credentials('arangoMatchesStag)
+                DB_PW_Stag=credentials('arangoMatchesStag')
             }
             steps{
                 sh "sed -i '\$ d' .env"
