@@ -2,17 +2,13 @@
 
 FROM golang:1.10 as builder
 
-
-ENV password=${arangoPassword}
+ARG PASSWORD
 
 #Download the service
 RUN mkdir -p /go/src/github.com/iafoosball/matches-service
 #WORKDIR /go/src/github.com/iafoosball
 WORKDIR /go/src/github.com/iafoosball/matches-service
 COPY . .
-RUN echo ${password}
-RUN touch ${password}
-RUN ls
 #RUN git fetch --tags
 #RUN latestTag=$(git describe --tags `git rev-list --tags --max-count=1`) && git checkout $latestTag
 #WORKDIR /go/src/github.com/iafoosball/matches-service

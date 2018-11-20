@@ -1,7 +1,10 @@
 version: '3'
 services:
   matches-service:
-    build: './'
+    build:
+      context: .
+      args:
+      - PASSWORD=
     links:
       - arangodb
     depends_on:
@@ -12,8 +15,6 @@ services:
     image: arangodb/arangodb:latest
     ports:
       - 8001:8529
-    environment:
-      - ARANGO_ROOT_PASSWORD=${arangoPassword}
 
 #
 #services:

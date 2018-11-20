@@ -1,12 +1,11 @@
 pipeline {
     environment {
-        DB_PW_Stag=credentials('arangoMatchesStag')
+        arangoMatchesStag=credentials('arangoMatchesStag')
+        arangoMatchesProd=credentials('arangoMatchesProd')
     }
     agent any
 
     stages {
-
-
         stage ("Prepare stag environment") {
             steps {
                 sh "docker kill matches-service-stag &"
@@ -18,6 +17,7 @@ pipeline {
 
         stage ("Build") {
             steps{
+                sh "printf ${DB_PW_STAG} >> .env"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
             }
         }

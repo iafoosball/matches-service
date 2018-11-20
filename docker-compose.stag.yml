@@ -10,3 +10,5 @@ services:
       - 8001:8529
     volumes:
       - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
+    environment:
+    - ARANGO_ROOT_PASSWORD=${arangoPasswordStag}
