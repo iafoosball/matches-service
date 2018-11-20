@@ -16,25 +16,20 @@ pipeline {
                 DB_PW_Stag=credentials('arangoMatchesStag')
             }
             steps{
-                sh "sed -i '\$ d' .env"
-                sh "printf ${DB_PW_STAG} >> .env"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
-                sh "sed -i '\$ d' .env"
             }
         }
 
         stage ("Staging") {
             steps {
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
-                sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529"
-                sh "sleep 60s"
+                sh "sleep 30s"
             }
         }
 
         stage ("Test") {
             steps {
-                sh "docker exec matches-service-stag /matches.test "
-                sh "./matches.test"
+                sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529"
             }
         }
 
@@ -47,7 +42,23 @@ pipeline {
         }
 
         stage ("Production") {
-            steps {
+
+
+
+
+
+           environment {
+                           DB_PW_Stag=credentials('arangoMatchesStag')
+                       }
+                       steps{
+                           sh "sed -i '\$ d' .env"
+                           sh "printf ${DB_PW_STAG} >> .env"
+                           sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
+                           sh "sed -i '\$ d' .env"
+
+
+
+
 
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
