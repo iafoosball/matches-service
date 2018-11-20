@@ -1,6 +1,7 @@
 version: '3'
 services:
   matches-service:
+    container_name: 'matches-service-stag'
     ports:
     - 8000:8000
   arangodb:
