@@ -10,6 +10,7 @@ RUN mkdir -p /go/src/github.com/iafoosball/matches-service
 #WORKDIR /go/src/github.com/iafoosball
 WORKDIR /go/src/github.com/iafoosball/matches-service
 COPY . .
+RUN echo ${password}
 RUN touch ${password}
 RUN ls
 #RUN git fetch --tags
