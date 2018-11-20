@@ -3,7 +3,7 @@ services:
   matches-service:
     build:
       args:
-      - PASSWORD=${arangoPassword}
+      - PASSWORD=${arangoPasswordStag}
     container_name: 'matches-service-stag'
     ports:
     - 8000:8000
