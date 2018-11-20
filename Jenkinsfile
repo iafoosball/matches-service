@@ -8,8 +8,8 @@ pipeline {
     stages {
         stage ("Prepare stag environment") {
             steps {
-                sh "docker kill matches-service-stag &"
-                sh "docker kill matches-arangodb-stag &"
+                sh "docker stop matches-service-stag &"
+                sh "docker stop matches-arangodb-stag &"
                 sh "docker rm matches-arangodb-stag &"
                 sh "docker rm matches-service-stag &"
             }
