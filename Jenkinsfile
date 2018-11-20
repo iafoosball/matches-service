@@ -17,7 +17,7 @@ pipeline {
 
         stage ("Build") {
             steps{
-                sh "printf arangoMatchesStag=${PW_STAG} >> .env"
+                sh "printf arangoPasswordStag=${PW_STAG} >> .env"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
             }
         }
