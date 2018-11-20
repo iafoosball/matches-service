@@ -4,10 +4,6 @@ services:
     container_name: 'matches-service-stag'
     ports:
     - 8000:8000
-    links:
-    - matches-arangodb-stag
-    depends_on:
-    - "matches-arangodb-stag"
   arangodb:
     container_name: 'matches-arangodb-stag'
     ports:
