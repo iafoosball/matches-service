@@ -26,7 +26,7 @@ RUN dep ensure -vendor-only
 
 #Install tests
 WORKDIR /go/src/github.com/iafoosball/matches-service/matches
-RUN go test -c
+RUN CGO_ENABLED=0 GOOS=linux  go test -c -ldflags="-s -w" -v
 
 #Install the service
 WORKDIR /go/src/github.com/iafoosball/matches-service/cmd/matches-server/

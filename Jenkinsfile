@@ -26,6 +26,7 @@ pipeline {
         stage ("Staging") {
             steps {
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
+                sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529"
                 sh "sleep 60s"
             }
         }
