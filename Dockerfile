@@ -26,7 +26,6 @@ RUN dep ensure -vendor-only
 
 #Install tests
 WORKDIR /go/src/github.com/iafoosball/matches-service/matches
-RUN ls
 RUN go test -c
 
 #Install the service
@@ -36,11 +35,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -a -installsuffix cgo -o 
 # STEP 2 build a small image
 # start from scratch
 #FROM scratch
-
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
 
 # Copy our static executable
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/cmd/matches-server/matches-service .

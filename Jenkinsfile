@@ -32,7 +32,7 @@ pipeline {
 
         stage ("Test") {
             steps {
-                sh "docker cp matches-service-stag:/root/matches.test ."
+                sh "docker exec matches-service-stag /matches.test "
                 sh "./matches.test"
             }
         }
