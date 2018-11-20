@@ -3,6 +3,8 @@
 FROM golang:1.10 as builder
 
 ARG PASSWORD
+RUN echo ${PASSWORD}
+
 
 #Download the service
 RUN mkdir -p /go/src/github.com/iafoosball/matches-service

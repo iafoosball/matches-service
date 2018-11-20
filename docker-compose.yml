@@ -1,16 +1,16 @@
 version: '3'
 services:
   matches-service:
+    env_file: .env
     build:
       context: .
-      args:
-      - PASSWORD=
     links:
       - arangodb
     depends_on:
       - arangodb
 
   arangodb:
+    env_file: .env
     container_name: 'matches-arangodb'
     image: arangodb/arangodb:latest
     ports:
