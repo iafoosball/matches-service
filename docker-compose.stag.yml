@@ -12,6 +12,6 @@ services:
     ports:
       - 8001:8529
     volumes:
-      - /var/lib/iafoosball/arango/matches-data:/var/lib/arangodb3
+      - /var/lib/iafoosball/matches-data/arango/stag:/var/lib/arangodb3
     environment:
     - ARANGO_ROOT_PASSWORD=${arangoPasswordStag}
