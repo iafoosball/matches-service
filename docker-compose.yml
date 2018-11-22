@@ -4,6 +4,8 @@ services:
     env_file: .env
     build:
       context: .
+      args:
+        - PASSWORD=${arangoPasswordStag}
     links:
       - arangodb
     depends_on:
