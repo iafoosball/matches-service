@@ -3,7 +3,7 @@
 FROM golang:1.10 as builder
 
 ARG PASSWORD
-RUN echo ${PASSWORD}
+RUN echo $PASSWORD
 
 
 #Download the service
@@ -42,4 +42,4 @@ RUN apk --no-cache add ca-certificates
 # Copy our static executable
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/cmd/matches-server/matches-service .
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/matches/matches.test .
-CMD ["./matches-service","--port","8000","--host","0.0.0.0", "--dbhost=matches-arangodb-stag", "--dbuser=root", "--dbpassword=${PASSWORD}"]
+CMD ["./matches-service","--port","8000","--host","0.0.0.0", "--dbhost=matches-arangodb-stag", "--dbuser=root", "--dbpassword=$PASSWORD"]
