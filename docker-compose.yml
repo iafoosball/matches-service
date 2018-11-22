@@ -3,7 +3,7 @@ services:
   matches-service:
     env_file: .env
     command: >
-      bash -c "echo ${arangoPasswordStag}"
+      sh -c "echo ${arangoPasswordStag}"
     build:
       context: .
       args:
