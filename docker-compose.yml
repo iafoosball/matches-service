@@ -2,6 +2,8 @@ version: '3'
 services:
   matches-service:
     env_file: .env
+    command: >
+      bash -c "echo ${arangoPasswordStag}"
     build:
       context: .
       args:
