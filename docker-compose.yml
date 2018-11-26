@@ -11,3 +11,5 @@ services:
   arangodb:
     container_name: 'matches-arangodb'
     image: arangodb/arangodb:latest
+    ports:
+      - 8001:8529
