@@ -25,22 +25,22 @@ pipeline {
 
         stage ("Staging") {
             steps {
-                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up --force-recreate"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
                 sh "sleep 30s"
             }
         }
 
         stage ("Test") {
             steps {
-                sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529"
+                sh "docker exec matches-service-stag /matches.test --dbhost=matches-arangodb-stag --dbport=8529"
             }
         }
 
         stage ("Prepare prod environment") {
             steps {
-                sh "rm docker-compose.yml && rm Dockerfile"
-                sh "cp ../iaf-configs/matches-service/prod/docker-compose.yml . && cp ../iaf-configs/matches-service/prod/Dockerfile ."
-                sh "cp -rf matches.yml /var/lib/iafoosball/swagger-ui/ &"
+                sh "printf arangoPasswordStag=${PW_STAG} >> .env"
+                sh "sleep 3s"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
             }
         }
 

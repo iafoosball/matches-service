@@ -35,8 +35,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -a -installsuffix cgo -o 
 FROM alpine:latest
 ARG DBHOST
 ENV DBHOST $DBHOST
-ARG DBPW
-ENV DBPW $DBPW
 RUN echo $DBHOST
 RUN echo $DBPW
 
