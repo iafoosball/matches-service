@@ -43,4 +43,4 @@ RUN apk --no-cache add ca-certificates
 # Copy our static executable
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/cmd/matches-server/matches-service .
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/matches/matches.test .
-CMD ["./matches-service","--port","8000","--host","0.0.0.0", "--dbhost=$DBHOST", "--dbuser=root", "--dbpassword="]
+CMD ["./matches-service","--port","8000","--host","0.0.0.0", "--dbhost=$DBHOST", "--dbuser=root", "--dbpassword=$DBPW"]
