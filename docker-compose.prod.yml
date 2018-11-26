@@ -5,15 +5,15 @@ services:
       context: .
       args:
         - DBHOST=matches-arangodb-stag
-        - DBPW=$PW_STAG
+        - DBPW=$PW_PROD
     container_name: 'matches-service-prod'
     ports:
       - 8000:8000
   arangodb:
     container_name: 'matches-arangodb-prod'
     environment:
-      - ARANGO_ROOT_PASSWORD=$PW_STAG
+      - ARANGO_ROOT_PASSWORD=$PW_PROD
     ports:
       - 8001:8529
     volumes:
-      - /var/lib/iafoosball/matches-data/arango/stag:/var/lib/arangodb3
+      - /var/lib/iafoosball/matches-data/arango/prod:/var/lib/arangodb3

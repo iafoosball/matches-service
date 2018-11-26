@@ -40,7 +40,7 @@ pipeline {
 
         stage ("Prepare prod environment") {
             steps {
-                sh "printf arangoPasswordStag=${PW_STAG} >> .env"
+                sh "printf arangoPasswordProd=${PW_PROD} >> .env"
                 sh "sleep 3s"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
             }
