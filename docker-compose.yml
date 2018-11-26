@@ -1,40 +1,13 @@
 version: '3'
 services:
   matches-service:
-    env_file: .env
     build:
       context: .
-      args:
-        - PASSWORD="$arangoPasswordStag"
     links:
       - arangodb
     depends_on:
       - arangodb
 
   arangodb:
-    env_file: .env
     container_name: 'matches-arangodb'
     image: arangodb/arangodb:latest
-    ports:
-      - 8001:8529
-
-#
-#services:
-#  matches-service-prod:
-#    container_name: 'matches-service-prod'
-#    build: './'
-#    ports:
-#    - 9000:9000
-#    links:
-#    - matches-arangodb-prod
-#    depends_on:
-#    - "matches-arangodb-prod"
-#  matches-arangodb-prod:
-#    container_name: 'matches-arangodb-prod'
-#    image: arangodb/arangodb:latest
-#    ports:
-#    - 9001:8529
-#    environment:
-#    - ARANGO_ROOT_PASSWORD=iafoosball@matches for the win
-#    volumes:
-#    - /var/lib/iafoosball/prod/arango/matches:/var/lib/arangodb3
