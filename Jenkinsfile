@@ -12,6 +12,8 @@ pipeline {
                 sh "docker stop matches-arangodb-stag &"
                 sh "docker rm matches-arangodb-stag &"
                 sh "docker rm matches-service-stag &"
+                sh "docker kill matches-arangodb-stag &"
+                sh "docker kill matches-service-stag &"
             }
         }
 
