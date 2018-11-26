@@ -2,11 +2,6 @@
 
 FROM golang:1.10 as builder
 
-ARG DBHOST
-ARG DBPW
-RUN echo $DBHOST
-RUN echo $DBPW
-
 #Download the service
 RUN mkdir -p /go/src/github.com/iafoosball/matches-service
 #WORKDIR /go/src/github.com/iafoosball
@@ -34,13 +29,20 @@ RUN CGO_ENABLED=0 GOOS=linux  go test -c -ldflags="-s -w" -v
 WORKDIR /go/src/github.com/iafoosball/matches-service/cmd/matches-server/
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -a -installsuffix cgo -o matches-service .
 
-# STEP 2 build a small image
+# STEP 2 build a small image{DBHOST}
 # start from scratch
 # FROM scratch
 FROM alpine:latest
+ARG DBHOST
+ENV DBHOST $DBHOST
+ARG DBPW
+ENV DBPW $DBPW
+RUN echo $DBHOST
+RUN echo $DBPW
+
 RUN apk --no-cache add ca-certificates
 
 # Copy our static executable
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/cmd/matches-server/matches-service .
 COPY --from=builder /go/src/github.com/iafoosball/matches-service/matches/matches.test .
-CMD ["./matches-service","--port","8000","--host","0.0.0.0", "--dbhost=$DBHOST", "--dbuser=root", "--dbpassword=$DBPW"]
+CMD ./matches-service --port=8000 --host=0.0.0.0 --dbhost=$DBHOST  --dbuser=root --dbpassword=$DBPW

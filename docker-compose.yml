@@ -1,8 +1,6 @@
 version: '3'
 services:
   matches-service:
-    build:
-      context: .
     links:
       - arangodb
     depends_on:

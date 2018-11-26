@@ -2,14 +2,17 @@ version: '3'
 services:
   matches-service:
     build:
+      context: .
       args:
         - DBHOST=matches-arangodb-stag
-        - DBPW=$arangoPasswordStag
+        - DBPW=$PW_STAG
     container_name: 'matches-service-stag'
     ports:
     - 8000:8000
   arangodb:
     container_name: 'matches-arangodb-stag'
+    environment:
+      - ARANGO_ROOT_PASSWORD=$PW_STAG
     ports:
       - 8001:8529
     volumes:
