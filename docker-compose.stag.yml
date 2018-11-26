@@ -5,7 +5,7 @@ services:
       context: .
       args:
         - DBHOST=matches-arangodb-stag
-        - DBPW=$PW_STAG
+        - DBPW=$pw
     container_name: 'matches-service-stag'
     ports:
     - 8000:8000

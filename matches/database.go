@@ -64,7 +64,6 @@ func dbDriver(user string, password string) {
 		log.Println(err)
 		return
 	}
-	log.Println("the password:" + password)
 	client, err := driver.NewClient(driver.ClientConfig{
 		Connection:     conn,
 		Authentication: driver.BasicAuthentication(user, password),
