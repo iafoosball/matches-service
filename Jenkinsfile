@@ -28,13 +28,13 @@ pipeline {
         stage ("Staging") {
             steps {
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
-                sh "sleep 30s"
+                sh "sleep 10s"
             }
         }
 
         stage ("Test") {
             steps {
-                sh "docker exec -ti matches-service-stag sh -c '/matches.test --dbhost=matches-arangodb-stag --dbport=8529'"
+                sh "docker exec -ti matches-service-stag sh -c \"/matches.test --dbhost=matches-arangodb-stag --dbport=8529\""
                 sh "docker exec matches-service-stag /matches.test --dbhost=matches-arangodb-stag --dbport=8529"
             }
         }
