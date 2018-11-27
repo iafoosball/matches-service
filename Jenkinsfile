@@ -51,34 +51,18 @@ pipeline {
                 sh "printf arangoPasswordProd=${PW_PROD} >> .env"
                 sh "sleep 3s"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
+                sh "rm -f .env"
             }
         }
 
         stage ("Production") {
-
-
-
-
-
-           environment {
-                           DB_PW_Stag=credentials('arangoMatchesStag')
-                       }
-                       steps{
-                           sh "sed -i '\$ d' .env"
-                           sh "printf ${DB_PW_STAG} >> .env"
-                           sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
-                           sh "sed -i '\$ d' .env"
-
-
-
-
-
+           steps{
                 sh "docker stop matches-service-prod &"
                 sh "docker stop matches-arangodb-prod &"
                 sh "docker rm matches-arangodb-prod &"
                 sh "docker rm matches-service-prod &"
                 sh "sleep 15s"
-                sh "docker-compose up --force-recreate --build"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate"
             }
         }
     }
