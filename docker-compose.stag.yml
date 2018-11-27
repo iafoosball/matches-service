@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        - DBHOST=matches-arangodb-stag
+        - DBHOST=matches-service-stag
         - DBPW=$PW_STAG
     container_name: 'matches-service-stag'
     image: matches-arangodb-stag
