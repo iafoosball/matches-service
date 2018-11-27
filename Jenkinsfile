@@ -40,7 +40,7 @@ pipeline {
 
         stage ("Push Staging to Docker Repo") {
             steps {
-                sh "docker image tag matches-service-stag localhost:5000/matches-service-stag"
+                sh "docker tag matches-service-stag localhost:5000/matches-service-stag"
                 sh "docker push localhost:5000/matches-service-stag"
             }
         }
