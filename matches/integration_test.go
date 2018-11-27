@@ -28,12 +28,12 @@ func init() {
 
 	flag.Parse()
 	testAddr = "http://" + testHost + ":" + testPort + "/"
+	log.Println("The test addr is " + testAddr)
 	if i, err := strconv.Atoi(dbPort); err != nil {
 		log.Println(err)
 	} else {
 		InitDatabase(dbHost, i, databaseUser, databasePassword)
 	}
-	log.Println("The test addr is " + testAddr)
 
 	col(matchesColName).Truncate(nil)
 	col(goalsColName).Truncate(nil)

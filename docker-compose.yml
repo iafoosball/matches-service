@@ -5,9 +5,5 @@ services:
       - arangodb
     depends_on:
       - arangodb
-
   arangodb:
-    container_name: 'matches-arangodb'
     image: arangodb/arangodb:latest
-    ports:
-      - 8001:8529

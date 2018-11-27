@@ -34,7 +34,7 @@ pipeline {
 
         stage ("Test") {
             steps {
-                sh "docker exec matches-service-stag /matches.test --dbhost=matches-arangodb-stag --dbport=8529 --dbpassword=$PW_STAG"
+                sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529 --dbpassword=$PW_STAG"
             }
         }
 

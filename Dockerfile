@@ -37,8 +37,6 @@ ARG DBHOST
 ENV DBHOST $DBHOST
 ARG DBPW
 ENV DBPW $DBPW
-RUN echo $DBHOST
-RUN echo $DBPW
 
 RUN apk --no-cache add ca-certificates
 
