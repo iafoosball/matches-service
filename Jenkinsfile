@@ -28,7 +28,7 @@ pipeline {
         stage ("Staging") {
             steps {
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
-                sh "sleep 10s"
+                sh "sleep 15s"
             }
         }
 
