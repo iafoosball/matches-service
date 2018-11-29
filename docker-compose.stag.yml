@@ -7,7 +7,7 @@ services:
         - DBHOST=arangodb
         - DBPW=$PW_STAG
     container_name: 'matches-service-stag'
-    image: matches-arangodb-stag
+    image: matches-service-stag
     ports:
     - 8000:8000
   arangodb:
