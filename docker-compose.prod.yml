@@ -5,7 +5,7 @@ services:
       context: .
       args:
         - DBHOST=arangodb
-        - DBPW=$PW_STAG
+        - DBPW=$PW_PROD
     container_name: 'matches-service-prod'
     image: matches-service-prod
     ports:
