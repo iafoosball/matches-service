@@ -4,11 +4,12 @@ services:
     build:
       context: .
       args:
-        - DBHOST=matches-arangodb-stag
-        - DBPW=$PW_PROD
+        - DBHOST=arangodb
+        - DBPW=$PW_STAG
     container_name: 'matches-service-prod'
+    image: matches-service-prod
     ports:
-      - 8000:8000
+      - 8000:9000
   arangodb:
     container_name: 'matches-arangodb-prod'
     environment:
