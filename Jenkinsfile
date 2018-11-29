@@ -19,7 +19,7 @@ pipeline {
 
         stage ("Build") {
             steps{
-                sh "printf arangoPasswordStag=${PW_STAG} >> .env"
+                sh "printf PW_STAG=${PW_STAG} >> .env"
                 sh "sleep 3s"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
             }
@@ -48,7 +48,7 @@ pipeline {
 
         stage ("Prepare prod environment") {
             steps {
-                sh "printf arangoPasswordProd=${PW_PROD} >> .env"
+                sh "printf PW_PROD=${PW_PROD} >> .env"
                 sh "sleep 3s"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
             }
