@@ -68,7 +68,7 @@ pipeline {
     }
     post {
         always {
-            sh "docker-compose down -v --rmi 'all'"
+            sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v --rmi 'all'"
         }
     }
 }
