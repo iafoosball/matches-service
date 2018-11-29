@@ -9,12 +9,12 @@ services:
     container_name: 'matches-service-prod'
     image: matches-service-prod
     ports:
-      - 8000:9000
+      - 9000:8000
   arangodb:
     container_name: 'matches-arangodb-prod'
     environment:
       - ARANGO_ROOT_PASSWORD=$PW_PROD
     ports:
-      - 8001:8529
+      - 9001:8529
     volumes:
       - /var/lib/iafoosball/matches-data/arango/prod:/var/lib/arangodb3
