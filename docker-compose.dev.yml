@@ -1,0 +1,23 @@
+version: '3'
+services:
+  matches-service:
+    build:
+      context: .
+      args:
+        - DBHOST=arangodb
+        - DBPW=$pw
+    container_name: 'matches-service-dev'
+    image: matches-service-dev
+    ports:
+    - 8000:8000
+  arangodb:
+    container_name: 'matches-arangodb-dev'
+    environment:
+      - ARANGO_ROOT_PASSWORD=$pw
+    ports:
+      - 8001:8529
+    volumes:
+      - /var/lib/iafoosball/matches-data/arango/dev:/var/lib/arangodb3
+
+#Start with:
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f up --build --force-recreate

@@ -27,7 +27,7 @@ pipeline {
 
         stage ("Staging") {
             steps {
-                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up --force-recreate"
                 sh "sleep 60s"
             }
         }
@@ -51,6 +51,7 @@ pipeline {
                 sh "echo PW_PROD=${PW_PROD} >> .env"
                 sh "sleep 3s"
                 sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
+                sh "rm -f .env"
             }
         }
 
