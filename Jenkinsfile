@@ -27,7 +27,7 @@ pipeline {
 
         stage ("Staging") {
             steps {
-                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml up -d --force-recreate"
+                sh "docker-compose -f docker-compose.stag.yml up -d --force-recreate"
                 sh "sleep 60s"
             }
         }
@@ -62,7 +62,7 @@ pipeline {
                 sh "docker rm matches-arangodb-prod &"
                 sh "docker rm matches-service-prod &"
                 sh "sleep 15s"
-                sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate"
+                sh "docker-compose -f docker-compose.prod.yml up --force-recreate"
             }
         }
     }

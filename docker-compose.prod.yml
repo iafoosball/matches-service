@@ -10,8 +10,13 @@ services:
     image: matches-service-prod
     ports:
       - 9000:8000
+    links:
+      - arangodb
+    depends_on:
+      - arangodb
   arangodb:
     container_name: 'matches-arangodb-prod'
+    image: arangodb/arangodb:latest
     environment:
       - ARANGO_ROOT_PASSWORD=$PW_PROD
     ports:
