@@ -47,8 +47,9 @@ pipeline {
 
         stage ("Copy openAPI spec file") {
             steps {
-            sh "mkdir ../openAPISpecs"
-            sh "cp matches.yml ../openAPISpecs/"
+            sh "mkdir -p /var/lib/iafoosball/openAPISpecs/"
+            sh "rm /var/lib/iafoosball/openAPISpecs/matches.yml &"
+            sh "cp matches.yml /var/lib/iafoosball/openAPISpecs/"
             }
         }
 
