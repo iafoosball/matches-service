@@ -25,7 +25,7 @@
     ".",
     "cluster",
     "http",
-    "util"
+    "util",
   ]
   pruneopts = ""
   revision = "88874b717ad9582bb274e06a2ff75428fe66c7cc"
@@ -59,7 +59,7 @@
   name = "github.com/go-openapi/analysis"
   packages = [
     ".",
-    "internal"
+    "internal",
   ]
   pruneopts = ""
   revision = "c701774f4e604d952e4e8c56dee260be696e33c3"
@@ -108,7 +108,7 @@
     "middleware/denco",
     "middleware/header",
     "middleware/untyped",
-    "security"
+    "security",
   ]
   pruneopts = ""
   revision = "9a3091f566c0811ef4d54b535179bc0fc484a11f"
@@ -161,7 +161,7 @@
   packages = [
     "buffer",
     "jlexer",
-    "jwriter"
+    "jwriter",
   ]
   pruneopts = ""
   revision = "60711f1a8329503b04e1c88535f419d0bb440bff"
@@ -181,7 +181,7 @@
   packages = [
     "context",
     "idna",
-    "netutil"
+    "netutil",
   ]
   pruneopts = ""
   revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
@@ -204,7 +204,7 @@
     "unicode/cldr",
     "unicode/norm",
     "unicode/rangetable",
-    "width"
+    "width",
   ]
   pruneopts = ""
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
@@ -216,7 +216,7 @@
   name = "gopkg.in/mgo.v2"
   packages = [
     "bson",
-    "internal/json"
+    "internal/json",
   ]
   pruneopts = ""
   revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
@@ -246,7 +246,7 @@
     "github.com/go-openapi/swag",
     "github.com/go-openapi/validate",
     "github.com/jessevdk/go-flags",
-    "golang.org/x/net/netutil"
+    "golang.org/x/net/netutil",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
