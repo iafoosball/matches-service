@@ -3,6 +3,7 @@ services:
   matches-service:
     build:
       context: .
+      dockerfile: DockerfileDev
       args:
         - DBHOST=arangodb
         - DBPW=$pw

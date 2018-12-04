@@ -45,6 +45,12 @@ pipeline {
             }
         }
 
+        stage ("Copy openAPI spec file") {
+            steps {
+            sh "mkdir ../openAPISpecs"
+            sh "cp matches.yml ../openAPISpecs/"
+            }
+        }
 
         stage ("Prepare prod environment") {
             steps {
