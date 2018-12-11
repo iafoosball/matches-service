@@ -21,7 +21,7 @@ pipeline {
             steps{
                 sh "echo PW_STAG=${PW_STAG} >> .env"
                 sh "sleep 3s"
-                sh "docker-compose -f docker-compose.yml -f docker-compose.stag.yml build"
+                sh "docker-compose -f docker-compose.stag.yml build"
             }
         }
 
@@ -57,7 +57,7 @@ pipeline {
             steps {
                 sh "echo PW_PROD=${PW_PROD} >> .env"
                 sh "sleep 3s"
-                sh "docker-compose -f docker-compose.yml -f docker-compose.prod.yml build"
+                sh "docker-compose -f docker-compose.prod.yml build"
                 sh "rm -f .env"
             }
         }
