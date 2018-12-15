@@ -268,7 +268,7 @@ definitions:
             description: "Is this game with bets"
           maxGoals:
             type: integer
-            description: 'The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.'
+            description: The maximum number of goals for this game. If a time is specified the first criteria which is true will stop the match.
           maxTime:
             type: integer
             description: The maximum tim in sec for this game. If a max goals is specified the first criteria which is true will stop the match.

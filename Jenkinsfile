@@ -37,14 +37,14 @@ pipeline {
                 sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529 --dbpassword=$PW_STAG"
             }
         }
-
+        /*
         stage ("Push Staging to Docker Repo") {
             steps {
                 sh "docker tag matches-service-stag localhost:5000/matches-service-stag"
                 sh "docker push localhost:5000/matches-service-stag"
             }
         }
-
+        */
         stage ("Copy openAPI spec file") {
             steps {
                 sh "mkdir -p /var/lib/iafoosball/openAPISpecs/"
