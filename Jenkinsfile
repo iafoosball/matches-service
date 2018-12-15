@@ -13,10 +13,10 @@ pipeline {
                 sh "docker rm matches-arangodb-stag &"
                 sh "docker rm matches-stag &"
 
-                sh "docker stop ${docker ps -aqf name=matches-arangodb-stag} &"
-                sh "docker rm ${docker ps -aqf name=matches-arangodb-stag} &"
-                sh "docker stop ${docker ps -aqf name=matches-stag} &"
-                sh "docker rm ${docker ps -aqf name=matches-stag} &"
+                sh "docker stop \$(docker ps -aqf name=matches-arangodb-stag) &"
+                sh "docker rm \$(docker ps -aqf name=matches-arangodb-stag) &"
+                sh "docker stop \$(docker ps -aqf name=matches-stag) &"
+                sh "docker rm \$(docker ps -aqf name=matches-stag) &"
             }
         }
 
@@ -72,10 +72,10 @@ pipeline {
                 sh "docker rm matches-arangodb-prod &"
                 sh "docker rm matches-service-prod &"
 
-                sh "docker stop ${docker ps -aqf name=matches-prod} &"
-                sh "docker stop ${docker ps -aqf name=matches-arangodb-prod} &"
-                sh "docker rm ${docker ps -aqf name=matches-arangodb-prod} &"
-                sh "docker rm ${docker ps -aqf name=matches-prod} &"
+                sh "docker stop $(docker ps -aqf name=matches-prod) &"
+                sh "docker stop $(docker ps -aqf name=matches-arangodb-prod) &"
+                sh "docker rm $(docker ps -aqf name=matches-arangodb-prod) &"
+                sh "docker rm $(docker ps -aqf name=matches-prod) &"
                 sh "sleep 15s"
                 sh "docker-compose -p matches-prod -f docker-compose.prod.yml up --force-recreate"
             }
