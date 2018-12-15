@@ -6,8 +6,8 @@ services:
       args:
         - DBHOST=arangodb
         - DBPW=$PW_PROD
-    container_name: 'matches-service-prod'
-    image: matches-service-prod
+    container_name: 'matches-prod'
+    image: matches-prod
     ports:
       - 9000:8000
     links:
