@@ -40,6 +40,7 @@ pipeline {
                 sh "docker exec matches-service-stag /matches.test --dbhost=arangodb --dbport=8529 --dbpassword=$PW_STAG"
             }
         }
+
         /*
         stage ("Push Staging to Docker Repo") {
             steps {
