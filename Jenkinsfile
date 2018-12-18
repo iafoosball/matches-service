@@ -73,12 +73,12 @@ pipeline {
                 sh "docker rm matches-arangodb-prod &"
                 sh "docker rm matches-service-prod &"
 
-                /*
-                sh "docker stop $(docker ps -aqf name=matches-prod) &"
-                sh "docker stop $(docker ps -aqf name=matches-arangodb-prod) &"
-                sh "docker rm $(docker ps -aqf name=matches-arangodb-prod) &"
-                sh "docker rm $(docker ps -aqf name=matches-prod) &"
-                */
+
+                sh "docker stop \$(docker ps -aqf name=matches-prod) &"
+                sh "docker stop \$(docker ps -aqf name=matches-arangodb-prod) &"
+                sh "docker rm \$(docker ps -aqf name=matches-arangodb-prod) &"
+                sh "docker rm \$(docker ps -aqf name=matches-prod) &"
+
 
                 sh "sleep 15s"
                 sh "docker-compose -p matches-prod -f docker-compose.prod.yml up --force-recreate"
@@ -87,6 +87,7 @@ pipeline {
     }
     post {
         always {
+            sh "docker system prune --all"
             sh "docker-compose -f docker-compose.stag.yml down -v --rmi 'all'"
             sh "docker-compose -f docker-compose.prod.yml down -v --rmi 'all'"
         }
