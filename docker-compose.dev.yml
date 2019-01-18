@@ -25,5 +25,10 @@ services:
     volumes:
       - /var/lib/iafoosball/matches-data/arango/dev:/var/lib/arangodb3
 
+networks:
+  default:
+    external:
+      name: kong_iafoosball
 #Start with:
 # docker-compose -f docker-compose.yml -f docker-compose.dev.yml -f up --build --force-recreate
+# cant find package? run 'dep check and dep ensure -update'
