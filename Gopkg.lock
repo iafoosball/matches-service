@@ -47,14 +47,6 @@
   version = "v9"
 
 [[projects]]
-  digest = "1:6098222470fe0172157ce9bbef5d2200df4edde17ee649c5d6e48330e4afa4c6"
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  pruneopts = ""
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
-
-[[projects]]
   digest = "1:582d54fcb7233da8dde1dfd2210a5b9675d0685f84246a8d317b07d680c18b1b"
   name = "github.com/docker/go-units"
   packages = ["."]
@@ -155,54 +147,6 @@
   version = "0.16.0"
 
 [[projects]]
-  digest = "1:dcf8316121302735c0ac84e05f4686e3b34e284444435e9a206da48d8be18cb1"
-  name = "github.com/gomodule/redigo"
-  packages = [
-    "internal",
-    "redis",
-  ]
-  pruneopts = ""
-  revision = "9c11da706d9b7902c6da69c592f75637793fe121"
-  version = "v2.0.0"
-
-[[projects]]
-  digest = "1:dbbeb8ddb0be949954c8157ee8439c2adfd8dc1c9510eb44a6e58cb68c3dce28"
-  name = "github.com/gorilla/context"
-  packages = ["."]
-  pruneopts = ""
-  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
-  version = "v1.1.1"
-
-[[projects]]
-  digest = "1:c2c8666b4836c81a1d247bdf21c6a6fc1ab586538ab56f74437c2e0df5c375e1"
-  name = "github.com/gorilla/mux"
-  packages = ["."]
-  pruneopts = ""
-  revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
-  version = "v1.6.2"
-
-[[projects]]
-  branch = "develop"
-  digest = "1:c4a09a2e67fe1afd0e1bb01e6c6d4895c1d5374b100811a5a5e2a9ab80a8600f"
-  name = "github.com/iafoosball/auth-service"
-  packages = [
-    "jwt",
-    "rand",
-    "redis",
-    "rs256",
-  ]
-  pruneopts = ""
-  revision = "920ea2d0c2bb14807814f70bd07802ff904985ed"
-
-[[projects]]
-  branch = "master"
-  digest = "1:9e35d7f42e74bbb61d6f90d290cecc820fd2970cb6d2e6d28bbcabff1d34ab08"
-  name = "github.com/iafoosball/middleware"
-  packages = ["authorization"]
-  pruneopts = ""
-  revision = "b33ece53d5145c6cc0f4b123baa1eb987dfedfd0"
-
-[[projects]]
   digest = "1:ca5c90960520407749b98c49650f54f5f90a667796e85c5ee1597478f702fb91"
   name = "github.com/jessevdk/go-flags"
   packages = ["."]
@@ -301,7 +245,6 @@
     "github.com/go-openapi/strfmt",
     "github.com/go-openapi/swag",
     "github.com/go-openapi/validate",
-    "github.com/iafoosball/middleware/authorization",
     "github.com/jessevdk/go-flags",
     "golang.org/x/net/netutil",
   ]

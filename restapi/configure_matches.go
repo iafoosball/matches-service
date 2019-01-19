@@ -9,7 +9,6 @@ import (
 	"github.com/go-openapi/swag"
 	"github.com/iafoosball/matches-service/matches"
 	"github.com/iafoosball/matches-service/restapi/operations"
-	auth "github.com/iafoosball/middleware/authorization"
 	"log"
 	"net/http"
 )
@@ -90,19 +89,21 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	// TODO: encapsulate this into separate function (for visitor pattern over handler i.e. return authenticate(handler)
 	// TODO: figure out better pay of passing auth-service address
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		v := &auth.JWTValidator {
-			Protocol:"http",
-			Hostname: "auth-service",
-			Port:8070,
-		}
-
-		authStr := r.Header.Get("Authorization")
-		if ok, err := v.ValidateAuth(authStr); !ok || err != nil {
-			w.WriteHeader(401)
-			return
-		}
-
-		handler.ServeHTTP(w, r)
-	})
+	// This middleware was commented out for project presentation.
+	//return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//	v := &auth.JWTValidator {
+	//		Protocol:"http",
+	//		Hostname: "auth-service",
+	//		Port:8070,
+	//	}
+	//
+	//	authStr := r.Header.Get("Authorization")
+	//	if ok, err := v.ValidateAuth(authStr); !ok || err != nil {
+	//		w.WriteHeader(401)
+	//		return
+	//	}
+	//
+	//	handler.ServeHTTP(w, r)
+	//})
+	return handler
 }
