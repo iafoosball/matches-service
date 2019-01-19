@@ -3,6 +3,7 @@ package paged
 import (
 	"github.com/iafoosball/matches-service/models"
 	"github.com/iafoosball/matches-service/restapi/operations"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -21,6 +22,7 @@ func MatchesQuery(params operations.GetMatchesParams) string {
 	sort = "Sort doc." + strings.Replace(sort, ",", ", doc.", -1)
 	filter := BuildFilter(*params.Filter)
 	// is this possible in one query, getting number of total items and the selected items?
+	log.Println("FOR doc IN matches " + filter + " " + sort + " " + *params.Order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc")
 	return "FOR doc IN matches " + filter + " " + sort + " " + *params.Order + " Limit " + strconv.FormatInt(*params.Start-1, 10) + ", " + strconv.FormatInt(*params.Size, 10) + " RETURN doc"
 
 }
