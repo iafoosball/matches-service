@@ -36,8 +36,12 @@ This will start an the database (ArangoDB) and
 
 ### Filter
 
+Get latest 5 games
+FOR doc IN matches  Sort doc.startTime DESC Limit 0, 5 RETURN doc
 
-##### Example how to retrieve the first five items of 2019-01-19.
+
+
+##### Example how to retrieve the first five items of 2019-01-19. NOT WOKRING!!!
 Input URL without escape:
 ```
 http://iafoosball.me:9000/matches/
@@ -51,8 +55,8 @@ http://iafoosball.me:9000/matches/
 
 Output for ArangoDB:
 ```
-FOR doc IN matches Filter like(doc.startTime,'2019-01-19%')
-Sort doc.endTime DESC Limit 0, 5 RETURN doc
+FOR doc IN matches FILTER DATE_DAY(doc.startTime)==19 Filter DATE_MONTH(doc.startTime)==1 Filter DATE_YEAR(doc.startTime)==2019
+Sort doc.startTime DESC Limit 0, 5 RETURN doc
 ```
 
 ## Others
