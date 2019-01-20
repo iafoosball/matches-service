@@ -79,7 +79,7 @@ func buildLink(addr string, start int64, size int64) string {
 // BuildFilter formats the filter correctly for arangodb. If no filter is present an empty string is returned.
 func BuildFilter(filter string) string {
 	if filter != "" {
-		return "Filter doc." + strings.Replace(filter, ",", ", doc.", -1)
+		return "Filter " + strings.Replace(filter, ",", ", doc.", -1)
 	}
 	return ""
 }
