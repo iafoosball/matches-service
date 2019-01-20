@@ -5,6 +5,7 @@ import (
 	"github.com/iafoosball/matches-service/matches/paged"
 	"github.com/iafoosball/matches-service/models"
 	"github.com/iafoosball/matches-service/restapi/operations"
+	"github.com/sirupsen/logrus"
 	"log"
 )
 
@@ -16,7 +17,7 @@ var (
 // Has test
 func CreateMatch() func(params operations.PostMatchesParams) middleware.Responder {
 	return func(params operations.PostMatchesParams) middleware.Responder {
-		log.Println(*params.Body)
+		logMatch(params.Body)
 		meta, err := col(matchesColName).CreateDocument(nil, &params.Body)
 		handleErr(err)
 		return operations.NewPostMatchesOK().WithPayload(meta)
@@ -75,4 +76,11 @@ func handleErr(err error) {
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+// Logs the full match data inside the body
+func logMatch(m *models.Match) {
+	logrus.WithFields(logrus.Fields{
+		"getParameters": m,
+	}).Info("Request received!")
 }

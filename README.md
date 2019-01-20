@@ -30,7 +30,30 @@ From inside the matches-service folder, where the `matches.yml` file and
  and for the server <br />
  ```go run ../../go-swagger/go-swagger/cmd/swagger/swagger.go generate server -f matches.yml -A matches``` <br />
 Finally, make the `startMatches.sh` file executable and execute it by using `chmod +x startMatches.sh && ./startMatches.sh`  <br />
-This will start an the database (ArangoDB) and 
+This will start an the database (ArangoDB) and
+
+## Pagination API Usage
+
+### Filter
+
+
+##### Example how to retrieve the first five items of 2019-01-19.
+Input URL without escape:
+```
+http://iafoosball.me:9000/matches/
+?filter=like(doc.startTime,'2019-01-19%')
+````
+Input URL with escape:
+```
+http://iafoosball.me:9000/matches/
+?filter=like(doc.startTime,%272019-01-19%%27)
+```
+
+Output for ArangoDB:
+```
+FOR doc IN matches Filter like(doc.startTime,'2019-01-19%')
+Sort doc.endTime DESC Limit 0, 5 RETURN doc
+```
 
 ## Others
 #### Produce a dependency map
