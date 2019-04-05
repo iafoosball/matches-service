@@ -1,0 +1,118 @@
+syntax = "proto3";
+package matchespb;
+
+message Match {
+    string _id = 1;
+    string _key = 2;
+    string tableID = 3;
+    bool started = 4;
+    repeated User users = 5;
+    Settings settings = 6;
+    string startTime = 7;
+    int32 scoreBlue = 8;
+    int32 scoreRed = 9;
+    string endTime = 10;
+    bool completed = 11;
+    string winner = 12;
+    Positions positions = 13;
+    map<string, string> labels = 14;
+}
+
+message User {
+    string id = 1;
+    string username = 2;
+    bool admin = 3;
+    bool ready = 4;
+    string position = 5;
+    int64 bet = 6;
+    string color = 7;
+}
+
+message Settings {
+    bool oneOnOne = 1;
+    bool twoOnOne = 2;
+    bool tournament = 3;
+    bool drunk = 4;
+    bool freeGame = 5;
+    bool payed = 6;
+    bool bet = 7;
+    int64 maxGoals = 8;
+    int64 maxTime = 9;
+    bool rated = 10;
+    bool switchPositions = 11;
+    bool tournamentMode = 12;
+}
+
+message Positions {
+    string blueDefense = 1;
+    string blueAttack = 2;
+    string redDefense = 3;
+    string redAttack = 4;
+}
+
+//message PagedGoals {
+//    repeated Links links = 1;
+//    repeated Goal content = 2;
+//    Page page = 3;
+//}
+//
+//message Goal {
+//    string _id = 1;
+//    string _key = 2;
+//    string _from = 3;
+//    string _to = 4;
+//    string matchID = 5;
+//    string speed = 6;
+//    string side = 7;
+//    bool position = 8;
+//    string dateTime = 9;
+//}
+//
+//message Links {
+//    string rel  = 1;
+//    string href = 2;
+//}
+//
+//message Page {
+//    int64 start = 1;
+//    int64 size = 2;
+//    int64 totalItems = 3;
+//    int64 currentPage = 4;
+//    int64 totalPages = 5;
+//}
+//
+//message PagedMatches {
+//    repeated Links links = 1;
+//    repeated Match content = 2;
+//    Page page = 3;
+//}
+
+service MatchesService {
+    rpc GetOne(GetOneRequest) returns (Match) {};
+    rpc ListAll(ListAllRequest) returns (ListAllResponse) {};
+    rpc CreateOne(CreateOneRequest) returns (CreateOneResponse) {};
+}
+
+message GetOneRequest {
+    string matchID = 1;
+}
+
+// Page token contents should be a url-safe base64 encoded protocol buffe
+// https://cloud.google.com/apis/design/design_patterns
+message ListAllRequest {
+    int32 page_size = 1;
+    string page_token = 2;
+}
+
+message ListAllResponse {
+    repeated Match matches = 1;
+    string next_page_token = 2;
+}
+
+message CreateOneRequest {
+    Match match = 1;
+}
+
+message CreateOneResponse {
+    Match match = 1;
+}
